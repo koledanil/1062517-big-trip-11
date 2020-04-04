@@ -286,6 +286,12 @@ const render = (container, html, place = `beforeend`) => {
   container.insertAdjacentHTML(place, createTemplate());
 };
 
+const renderListItems = (container, html, place = `beforeend`) => {
+  for (let i = 0; i < EVENT_COUNT; i++) {
+    render(container, html, place);
+  }
+};
+
 // находим элементы, к-ые есть сразу у нас
 const header = document.querySelector(`.trip-main`);
 const navMenu = header.querySelector(`#nav-menu`);
@@ -314,6 +320,4 @@ const dayList = days.querySelector(`.trip-events__list`);
 
 render(dayList, tripEditForm);
 
-for (let i = 0; i < EVENT_COUNT; i++) {
-  render(dayList, tripItem);
-}
+renderListItems(dayList, tripItem);
