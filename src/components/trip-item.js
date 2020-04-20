@@ -1,4 +1,3 @@
-
 // TI 01 Разметка одного дополнительного офера
 const createOfferMarkup = (offerTitle, offerPrice) => {
   return (`
@@ -68,23 +67,86 @@ const calcDuration = (dateToFull, dateFromFull) => {
   return result;
 };
 
+// const getRepeatArray = (array) => {
+//   let newArr = [].concat(array);
+//   for (let k, j = 0; j < array.length; ++j) {
+//     for (k = j + 1; k < array.length; ++k) {
+//       if (newArr[j] === newArr[k]) {
+//         array[j] = array[j];
+//         array[k] = ``;
+//       }
+
+//     }
+//   }
+//   // console.log(array);
+// };
+
+// export const deleteDate = (arr) => {
+//   let moment = require(`moment`);
+//   let dateFrom = [];
+//   arr.map((it)=> {
+//     let correctDate = moment(it.date_from).format(`dddd DD MM`);
+//     dateFrom.push(correctDate);
+//   });
+
+//   let result = getRepeatArray(dateFrom);
+//   return result;
+// };
+
+// let moment = require(`moment`);
+// window.ys = moment(`2020-02-06T14:46:23.146Z`).format(`DD MM`);
+
+// Функция сравнивает новую дату пользовательской точки из массива с предыдыдушей
+// если дата не повторяется то дата отображается в размтке, если дата повторяется
+// то дата не показывается в разметке
+const compareDate = (date) => {
+  let result = ``;
+  let moment = require(`moment`);
+  let currentDate = moment(date).format(`DD MM`);
+
+  if (currentDate !== window.ys) {
+    result = ``;
+  } else {
+    result = `visually-hidden`;
+  }
+  window.ys = currentDate;
+  return result;
+};
+
 // ТI 06 Функция к-ая занимается формирование финального вида точки
 export const createItemMarkup = (arr) => {
+  let isHided = compareDate(arr.date_from);
+  let moment = require(`moment`);
   let eventType = makeLetterCase(arr.type);
   let preposition = choosePreposition(eventType);
   let destinationName = arr.destination.name;
+
+
   let dateFromFull = arr.date_from;
   let dateToFull = arr.date_to;
   let timeFrom = new Date(dateFromFull).getUTCHours() + `:` + (`0` + new Date(dateFromFull).getUTCMinutes()).slice(-2);
   let timeTo = new Date(dateToFull).getUTCHours() + `:` + (`0` + new Date(dateToFull).getUTCMinutes()).slice(-2);
   let duration = calcDuration(dateToFull, dateFromFull);
+
+  let dateStageMonthYear = moment(arr.date_from).format(`MMM YY`);
+  let dateStageDay = moment(arr.date_from).format(`D`);
+  let dateStageDayWeek = moment(arr.date_from).format(`ddd`);
+
+
   let basePrice = arr.base_price;
   let areOffers = arr.offers.length > 0; // проверяем длинну ответа по офферам
   const offers = areOffers ? createOfferTemplate(arr.offers) : `No offers choosen`; // если оферы есть то отрисоываем их
 
-
   return (`
-<li class="trip-events__item">
+<li class="trip-events__item day">
+
+  <div class="day__info">
+    <span class="day__counter ${isHided}">${dateStageDay}</span>
+    <time class="day__date ${isHided}" datetime="${dateFromFull}">${dateStageMonthYear}</time>
+    <span class="day__date day__week ${isHided}">${dateStageDayWeek}</span>
+  </div>
+  <ul class="trip-events__list"></ul>
+
   <div class="event">
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${eventType}.png" alt="${eventType} icon">
@@ -112,5 +174,3 @@ export const createItemMarkup = (arr) => {
 </li>
 `);
 };
-
-

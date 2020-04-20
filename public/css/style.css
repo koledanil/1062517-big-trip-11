@@ -930,3 +930,10 @@ main {
 
 .statistics__item:not(:last-child) {
   margin-bottom: 78px; }
+
+  .day__week {
+    font-size: 13px;
+    text-transform: capitalize;
+    color: #424242;
+  }
+  

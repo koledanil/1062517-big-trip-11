@@ -11,5 +11,6 @@ Thumbs.db
 *.log*
 node_modules/
 demo.js
+.history
 
 # Файлы сборки (допишите самостоятельно)
