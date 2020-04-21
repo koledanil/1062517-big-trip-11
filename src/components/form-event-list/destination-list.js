@@ -4,8 +4,7 @@ const makeListDestinations = (destinationName) => {
 };
 
 export const createListDestinationsTemplate = (arr) => {
-  const listDestinationMarkup = arr.map((it) => makeListDestinations(it.name)).join(`\n`);
-  return listDestinationMarkup;
+  return arr.map((it) => makeListDestinations(it.name)).join(`\n`);
 
 };
 

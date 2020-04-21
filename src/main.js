@@ -1,4 +1,3 @@
-import {demoItem} from "./mock/item-demo.js";
 import {demoItem1} from "./mock/item-demo.js";
 
 // импортируем файлы
@@ -40,7 +39,7 @@ const events = document.querySelector(`.trip-events`);
 render(navMenu, mainMenu, `afterend`);
 render(mainFilters, tripFilters, `afterend`);
 
-render(header, tripItemInfo(demoItem), `afterbegin`);
+render(header, tripItemInfo(demoItem1.points), `afterbegin`);
 
 // находим элемент, который появляется в процессе добавления
 const commonInfo = header.querySelector(`.trip-info`);
@@ -56,7 +55,7 @@ render(days, tripDay);
 // находим элемент, который появляется в процессе добавления
 const dayList = days.querySelector(`.trip-events__list`);
 
-render(dayList, createTripEditForm(demoItem1.points[8], demoItem1.offers, demoItem1.destination)); // отрисовывает открытым поинт что указан
+render(dayList, createTripEditForm(demoItem1.points[2], demoItem1.offers, demoItem1.destination)); // отрисовывает открытым поинт что указан
 renderAllPoints(demoItem1.points, days);
 
 let destinationList = document.querySelector(`#destination-list-1`);

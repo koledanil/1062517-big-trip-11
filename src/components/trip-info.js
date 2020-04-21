@@ -1,3 +1,6 @@
+import moment from 'moment';
+const AMOUNT_DESTINATION_IN_INFO = 3;
+
 // Информация о путешествии и маршрут
 // TIN 01 Находит среди всех точек последнюю точку и берет из нее FROM_TO
 const prepareDate = (arr) => {
@@ -11,21 +14,19 @@ const prepareDate = (arr) => {
 // TIN 02 Определяет продолжнительность путешествия. Также ЕСЛИ даты идут в одном месяце
 // то отобржает так APR, WED 8—FRI 17. Если начало и конец в разных то APR, WED 8— MAY, FRI 17.
 const checkDates = (arr) => {
-  let moment = require(`moment`);
-  let sDateOriginal = arr[0].date_from;
+  const sDateOriginal = arr[0].date_from;
   let result = `Duration of your awesome trip`;
-
   if (sDateOriginal !== undefined) {
-    let startDate = moment(arr[0].date_from);
-    let endDate = moment(prepareDate(arr));
+    const startDate = moment(arr[0].date_from);
+    const endDate = moment(prepareDate(arr));
 
     if (startDate.format(`MMM`) === endDate.format(`MMM`)) {
-      let readySatrtDate = startDate.format(`MMM, ddd D`);
-      let readyEndDate = endDate.format(`ddd D`);
+      const readySatrtDate = startDate.format(`MMM, ddd D`);
+      const readyEndDate = endDate.format(`ddd D`);
       result = `${readySatrtDate}&mdash;${readyEndDate}`;
     } else {
-      let readySatrtDate = moment(arr[0].date_from).format(`MMM, ddd D`);
-      let readyEndDate = moment(prepareDate(arr)).format(`MMM, ddd D`);
+      const readySatrtDate = moment(arr[0].date_from).format(`MMM, ddd D`);
+      const readyEndDate = moment(prepareDate(arr)).format(`MMM, ddd D`);
       result = `${readySatrtDate} &mdash; ${readyEndDate}`;
     }
   }
@@ -40,15 +41,15 @@ const createRoute = (arr) => {
     desitanions.push(it.destination.name);
   });
 
-  if (desitanions.length > 3) {
+  if (desitanions.length > AMOUNT_DESTINATION_IN_INFO) {
     result = `${desitanions[0]} &mdash; ... &mdash; ${desitanions[desitanions.length - 1]}`;
   }
 
-  if (desitanions.length <= 3) {
+  if (desitanions.length <= AMOUNT_DESTINATION_IN_INFO) {
     result = `${desitanions[0]} &mdash; ${desitanions[1]} &mdash; ${desitanions[2]}`;
   }
 
-  if (desitanions.length < 3) {
+  if (desitanions.length < AMOUNT_DESTINATION_IN_INFO) {
     result = `Your awesome trip`;
   }
 
@@ -57,8 +58,8 @@ const createRoute = (arr) => {
 
 
 export const tripItemInfo = (arr) => {
-  let duration = checkDates(arr); // расчитываем длительность поездки
-  let route = createRoute(arr);
+  const duration = checkDates(arr); // расчитываем длительность поездки
+  const route = createRoute(arr);
 
 
   return (`
@@ -71,5 +72,3 @@ export const tripItemInfo = (arr) => {
   `);
 
 };
-// let startDate = moment(arr[0].date_from).format("ddd, MMM D");
-// let endDate = moment(prepareDate(arr)).format("ddd, MMM D");

@@ -1,4 +1,18 @@
-/* eslint-disable no-console */
+import moment from 'moment';
+
+const prepositiion = {
+  drive: `to`,
+  checkin: `in`,
+  sightseeing: `in`,
+  flight: `to`,
+  taxi: `to`,
+  bus: `to`,
+  transport: `to`,
+  restaurant: `in`,
+  ship: `to`,
+  train: `to`
+};
+
 // /////////// ВЫВОДИМ ДОПЫ /////////////
 // Данная функция шаблонизирует один офер
 const makeOffer = (offerTitle, offerPrice, checked = ``) => {
@@ -16,10 +30,10 @@ const makeOffer = (offerTitle, offerPrice, checked = ``) => {
 // Также она делает чекнутыми все офферы которые были выбраны юзером
 const createOfferTemplate = (arr, allOffersArr, eventType) => {
 
-  let offerUserArray = [];
+  const offerUserArray = [];
   let listOffers = null;
 
-  arr.offers.map((it) =>{ // делаем из объекта ОФЕРЫ ВЫБР ПОЛЬЗОВАТЕЛЕМ массив
+  arr.offers.map((it) => { // делаем из объекта ОФЕРЫ ВЫБР ПОЛЬЗОВАТЕЛЕМ массив
     offerUserArray.push(it.title);
   });
 
@@ -37,8 +51,7 @@ const createOfferTemplate = (arr, allOffersArr, eventType) => {
     }
   });
 
-  const offerMarkup = listOffers.map((it) => makeOffer(it.title, it.price, it.checked)).join(`\n`); // передаем результат в разметку
-  return offerMarkup;
+  return listOffers.map((it) => makeOffer(it.title, it.price, it.checked)).join(`\n`); // передаем результат в разметку
 };
 
 // Данная функция уже берет результаты createOfferTemplate и вставляет в разметку
@@ -59,27 +72,13 @@ const showOfferList = (offers) => {
 // /////////// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ, КОТОРЫЕ ПЕРЕШЛИ ИЗ ITEM-DEMO /////////////
 // Переводит названия из нижнего регистра в лэттер регистр
 const makeLetterCase = (str) => {
-  const result = str.charAt(0).toUpperCase() + str.slice(1);
-  return result;
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
 // Подставляет корректный препозишин на основании типа поездки
 const choosePreposition = (eventType) => {
 
-  const prepositiion = {
-    drive: `to`,
-    checkin: `in`,
-    sightseeing: `in`,
-    flight: `to`,
-    taxi: `to`,
-    bus: `to`,
-    transport: `to`,
-    restaurant: `in`,
-    ship: `to`,
-    train: `to`
-  };
-  const result = prepositiion[eventType.replace(/[^A-Za-zА-Яа-яЁё]/g, ``).toLowerCase()]; // удаляем пробелы тире и все из типа точки
-  return result;
+  return prepositiion[eventType.replace(/[^A-Za-zА-Яа-яЁё]/g, ``).toLowerCase()]; // удаляем пробелы тире и все из типа точки
 };
 // /////////// КОНЕЦ ВСПОМОГАТЕЛЬНЫМ ФУНКЦИИЯМ, КОТОРЫЕ ПЕРЕШЛИ ИЗ ITEM-DEMO /////////////
 
@@ -93,8 +92,7 @@ const makeDestinationImages = (link, description) => {
 };
 // выводим шаблон строки в разметку
 const makeDestinationTemplate = (arr) => {
-  const offerMarkup = arr.map((it) => makeDestinationImages(it.src, it.description)).join(`\n`);
-  return offerMarkup;
+  return arr.map((it) => makeDestinationImages(it.src, it.description)).join(`\n`);
 };
 
 // Эта функция берет Направление из данных пользователя, и находит в данных сервера инфу по этому направлению
@@ -112,30 +110,22 @@ const findDestination = (userDestination, eventallDestinationsArr) => {
 
 // /////////// ЭТО ОСНОВНАЯ ФУНКЦИЯ КОТОРАЯ ДЕЛАЕТ ВСЮ РАБОТУ /////////////
 export const createTripEditForm = (arr, allOffersArr, allDestinationsArr) => {
-  let moment = require(`moment`);
-  let eventTypeOriginal = arr.type; // эта переменная нужна чтобы работало Check-in дальше по коду мы удалем --, чтобы работал словарь choosePreposition
-  let eventType = makeLetterCase(eventTypeOriginal);
-  let preposition = choosePreposition(eventType);
-  let dateFromFull = arr.date_from;
-  let dateToFull = arr.date_to;
-  let timeFrom = moment(dateFromFull).format(`MM/DD/YY HH:MM`);
-  let timeTo = moment(dateToFull).format(`MM/DD/YY HH:MM`);
-  let basePrice = arr.base_price;
+  const eventTypeOriginal = arr.type; // эта переменная нужна чтобы работало Check-in дальше по коду мы удалем --, чтобы работал словарь choosePreposition
+  const eventType = makeLetterCase(eventTypeOriginal);
+  const preposition = choosePreposition(eventType);
+  const dateFromFull = arr.date_from;
+  const dateToFull = arr.date_to;
+  const timeFrom = moment(dateFromFull).format(`MM/DD/YY HH:MM`);
+  const timeTo = moment(dateToFull).format(`MM/DD/YY HH:MM`);
+  const basePrice = arr.base_price;
 
-
-  // let listTransferEvents = makeListTransferEvent();
-  // let listActivityEvents = makeListActivityEvent();
-  // let listDestinations = makeListDestinations();
-
-
-  let areOffers = arr.offers.length > 0; // проверяем длинну ответа по офферам
+  const areOffers = arr.offers.length > 0; // проверяем длинну ответа по офферам
   const offers = areOffers ? showOfferList(createOfferTemplate(arr, allOffersArr, eventTypeOriginal)) : ``; // если оферы есть то отрисоываем их (включая)
 
-
-  let destinationName = arr.destination.name; // берем направление из пользовательских данных
-  let destinationInfo = findDestination(destinationName, allDestinationsArr); // находим направление выбранное пользователем в данных сервера
-  let destinationDescription = destinationInfo.description;
-  let destinationPhotos = makeDestinationTemplate(destinationInfo.pictures);
+  const destinationName = arr.destination.name; // берем направление из пользовательских данных
+  const destinationInfo = findDestination(destinationName, allDestinationsArr); // находим направление выбранное пользователем в данных сервера
+  const destinationDescription = destinationInfo.description;
+  const destinationPhotos = makeDestinationTemplate(destinationInfo.pictures);
 
   return (`
   <form class="trip-events__item  event  event--edit" action="#" method="post">

@@ -1,3 +1,4 @@
+import moment from 'moment';
 // TI 01 Разметка одного дополнительного офера
 const createOfferMarkup = (offerTitle, offerPrice) => {
   return (`
@@ -11,14 +12,12 @@ const createOfferMarkup = (offerTitle, offerPrice) => {
 
 // TI 02 На базе разметки генерируем столько оферо сколько пришло в ответе
 const createOfferTemplate = (arr) => {
-  const offerMarkup = arr.map((it) => createOfferMarkup(it.title, it.price)).join(`\n`);
-  return offerMarkup;
+  return arr.map((it) => createOfferMarkup(it.title, it.price)).join(`\n`);
 };
 
 // TI 03 Функция которая делает лэттэ кейс
 const makeLetterCase = (str) => {
-  const result = str.charAt(0).toUpperCase() + str.slice(1);
-  return result;
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
 // TI 04 Функция выбирает prepositiion
@@ -36,105 +35,71 @@ const choosePreposition = (eventType) => {
     ship: `to`,
     train: `to`
   };
-  const result = prepositiion[eventType.replace(/[^A-Za-zА-Яа-яЁё]/g, ``).toLowerCase()]; // удаляем пробелы тире и все из типа точки
-  return result;
+  return prepositiion[eventType.replace(/[^A-Za-zА-Яа-яЁё]/g, ``).toLowerCase()]; // удаляем пробелы тире и все из типа точки
 };
 
 
 // TI 05 Функция высчитавает продолжительность события используется momemnt js
 const calcDuration = (dateToFull, dateFromFull) => {
-  let moment = require(`moment`);
-  let now = moment(dateToFull);
-  let then = moment(dateFromFull);
+  const now = moment(dateToFull);
+  const then = moment(dateFromFull);
 
-  let ms = moment(now, `DD/MM/YYYY HH:mm:ss`).diff(moment(then, `DD/MM/YYYY HH:mm:ss`));
-  let duration = moment.duration(ms);
+  const ms = moment(now, `DD/MM/YYYY HH:mm:ss`).diff(moment(then, `DD/MM/YYYY HH:mm:ss`));
+  const duration = moment.duration(ms);
 
-  let durDays = Math.floor(duration.asDays());
-  let durHours = moment.utc(ms).format(`hh`);
-  let durMinutes = moment.utc(ms).format(`mm`);
+  const durDays = Math.floor(duration.asDays());
+  const durHours = moment.utc(ms).format(`hh`);
+  const durMinutes = moment.utc(ms).format(`mm`);
 
-  let areDays = Math.floor(duration.asDays()) > 0;
-  let resultDays = areDays ? `${durDays}D` : ``;
+  const areDays = Math.floor(duration.asDays()) > 0;
+  const resultDays = areDays ? `${durDays}D` : ``;
 
-  let areHours = moment.utc(ms).format(`hh`) > 0;
-  let resultHours = areHours ? `${durHours}H` : ``;
+  const areHours = moment.utc(ms).format(`hh`) > 0;
+  const resultHours = areHours ? `${durHours}H` : ``;
 
-  let areMinutes = moment.utc(ms).format(`mm`) > 0;
-  let resultMinutes = areMinutes ? `${durMinutes}M` : ``;
+  const areMinutes = moment.utc(ms).format(`mm`) > 0;
+  const resultMinutes = areMinutes ? `${durMinutes}M` : ``;
 
-  let result = `${resultDays} ${resultHours} ${resultMinutes}`;
-  return result;
+  return `${resultDays} ${resultHours} ${resultMinutes}`;
 };
-
-// const getRepeatArray = (array) => {
-//   let newArr = [].concat(array);
-//   for (let k, j = 0; j < array.length; ++j) {
-//     for (k = j + 1; k < array.length; ++k) {
-//       if (newArr[j] === newArr[k]) {
-//         array[j] = array[j];
-//         array[k] = ``;
-//       }
-
-//     }
-//   }
-//   // console.log(array);
-// };
-
-// export const deleteDate = (arr) => {
-//   let moment = require(`moment`);
-//   let dateFrom = [];
-//   arr.map((it)=> {
-//     let correctDate = moment(it.date_from).format(`dddd DD MM`);
-//     dateFrom.push(correctDate);
-//   });
-
-//   let result = getRepeatArray(dateFrom);
-//   return result;
-// };
-
-// let moment = require(`moment`);
-// window.ys = moment(`2020-02-06T14:46:23.146Z`).format(`DD MM`);
 
 // Функция сравнивает новую дату пользовательской точки из массива с предыдыдушей
 // если дата не повторяется то дата отображается в размтке, если дата повторяется
 // то дата не показывается в разметке
 const compareDate = (date) => {
   let result = ``;
-  let moment = require(`moment`);
-  let currentDate = moment(date).format(`DD MM`);
+  const currentDate = moment(date).format(`DD MM`);
 
   if (currentDate !== window.ys) {
     result = ``;
   } else {
     result = `visually-hidden`;
   }
+
   window.ys = currentDate;
   return result;
 };
 
 // ТI 06 Функция к-ая занимается формирование финального вида точки
 export const createItemMarkup = (arr) => {
-  let isHided = compareDate(arr.date_from);
-  let moment = require(`moment`);
-  let eventType = makeLetterCase(arr.type);
-  let preposition = choosePreposition(eventType);
-  let destinationName = arr.destination.name;
+  const isHided = compareDate(arr.date_from);
+  const eventType = makeLetterCase(arr.type);
+  const preposition = choosePreposition(eventType);
+  const destinationName = arr.destination.name;
 
 
-  let dateFromFull = arr.date_from;
-  let dateToFull = arr.date_to;
-  let timeFrom = new Date(dateFromFull).getUTCHours() + `:` + (`0` + new Date(dateFromFull).getUTCMinutes()).slice(-2);
-  let timeTo = new Date(dateToFull).getUTCHours() + `:` + (`0` + new Date(dateToFull).getUTCMinutes()).slice(-2);
-  let duration = calcDuration(dateToFull, dateFromFull);
+  const dateFromFull = arr.date_from;
+  const dateToFull = arr.date_to;
+  const timeFrom = new Date(dateFromFull).getUTCHours() + `:` + (`0` + new Date(dateFromFull).getUTCMinutes()).slice(-2);
+  const timeTo = new Date(dateToFull).getUTCHours() + `:` + (`0` + new Date(dateToFull).getUTCMinutes()).slice(-2);
+  const duration = calcDuration(dateToFull, dateFromFull);
 
-  let dateStageMonthYear = moment(arr.date_from).format(`MMM YY`);
-  let dateStageDay = moment(arr.date_from).format(`D`);
-  let dateStageDayWeek = moment(arr.date_from).format(`ddd`);
+  const dateStageMonthYear = moment(arr.date_from).format(`MMM YY`);
+  const dateStageDay = moment(arr.date_from).format(`D`);
+  const dateStageDayWeek = moment(arr.date_from).format(`ddd`);
 
-
-  let basePrice = arr.base_price;
-  let areOffers = arr.offers.length > 0; // проверяем длинну ответа по офферам
+  const basePrice = arr.base_price;
+  const areOffers = arr.offers.length > 0; // проверяем длинну ответа по офферам
   const offers = areOffers ? createOfferTemplate(arr.offers) : `No offers choosen`; // если оферы есть то отрисоываем их
 
   return (`
