@@ -1,4 +1,5 @@
 import {demoItem1} from "./mock/item-demo.js";
+import {choosePreposition1} from "./mock/utils.js";
 
 // импортируем файлы
 import {mainMenu} from "./components/main-menu.js"; // основное меню сайта
