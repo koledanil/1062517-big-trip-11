@@ -1,69 +1,48 @@
+// MA 1 Имопртируем данные
 import {demoItem1} from "./mock/item-demo.js";
-import {choosePreposition1} from "./mock/utils.js";
 
-// импортируем файлы
-import {mainMenu} from "./components/main-menu.js"; // основное меню сайта
-import {tripContainer} from "./components/trip-container.js"; // Контейнер для маршрута
-import {tripCost} from "./components/trip-cost.js"; // Стоимость путеществия
-import {tripDay} from "./components/trip-day.js"; // 1 день путешествия и список точек
-import {tripFilters} from "./components/trip-filters.js"; // фильтрация
-import {createTripEditForm} from "./components/trip-form.js"; // Форма редактирования точки
-import {tripItemInfo} from "./components/trip-info.js"; // Информация о путешествии и маршрут
-import {createItemMarkup} from "./components/trip-item.js"; // Точка в маршруте
-// import {deleteDate} from "./components/trip-item.js";
-import {tripSort} from "./components/trip-sort.js"; // Сортировка путешествия
+// MA 2 Имопртируем подписи для интерфейса
+import {sortList, menuList, filterList, FILTER_SELECTED_BY_DFLT} from "./const.js";
 
-import {createListDestinationsTemplate} from "./components/form-event-list/destination-list.js";
-import {makeListTransferEvent} from "./components/form-event-list/events-list.js";
+// MA 3 Импортируем вспомогательные функции из утилит
+import {renderDom, RenderPosition} from "./utils.js";
 
-// функция рендеринга
-const render = (container, html, place = `beforeend`) => {
-  const createTemplate = () => html;
-  container.insertAdjacentHTML(place, createTemplate());
-};
+// MA 4 Импортируем компоненты одной точки маршрута, блока данных, формы редактирования
+import ItemComponent from "./components/trip-item.js";
+import FullInfoComponent from "./components/trip-info.js";
+import EditFormComponent from "./components/trip-form.js";
 
-// выводит все точки которые находятся в тестовом запросе
+// MA 5 Импортируем компоненты интерфейса сортировка, стоимость, главное меню, фильтры
+import SortListComponent from "./components/trip-sort.js";
+import TripCostComponent from "./components/trip-cost.js";
+import MainMenuComponent from "./components/main-menu.js";
+import FilterListComponent from "./components/trip-filters.js";
+
+
+// МА6 Рендерим все точки из ответа сервера
 const renderAllPoints = (arr, container) => {
   for (let i = 0; i < arr.length; i++) {
-    const result = createItemMarkup(arr[i]);
-    render(container, result);
+    renderDom(container, new ItemComponent(arr[i]).getElement(), RenderPosition.BEFOREEND);
   }
 };
 
-// находим элементы, к-ые есть сразу у нас
+
+// МА7 Рендерим компоненты
 const header = document.querySelector(`.trip-main`);
-const navMenu = header.querySelector(`#nav-menu`);
-const mainFilters = header.querySelector(`#filters`);
 const events = document.querySelector(`.trip-events`);
+const control = document.querySelector(`.trip-main__trip-controls`);
+const days = events.querySelector(`.trip-days`);
+const dayList = days.querySelector(`.trip-events__list`);
 
-
-render(navMenu, mainMenu, `afterend`);
-render(mainFilters, tripFilters, `afterend`);
-
-render(header, tripItemInfo(demoItem1.points), `afterbegin`);
+renderDom(control, new FilterListComponent(filterList, FILTER_SELECTED_BY_DFLT).getElement(), RenderPosition.AFTERBEGIN);
+renderDom(control, new MainMenuComponent(menuList).getElement(), RenderPosition.AFTERBEGIN);
+renderDom(header, new FullInfoComponent(demoItem1.points).getElement(), RenderPosition.AFTERBEGIN);
 
 // находим элемент, который появляется в процессе добавления
 const commonInfo = header.querySelector(`.trip-info`);
-render(commonInfo, tripCost);
+renderDom(commonInfo, new TripCostComponent().getElement(), RenderPosition.BEFOREEND);
+renderDom(events, new SortListComponent(sortList).getElement(), RenderPosition.AFTERBEGIN);
 
-render(events, tripSort);
-render(events, tripContainer);
-
-// находим элемент, который появляется в процессе добавления
-const days = events.querySelector(`.trip-days`);
-render(days, tripDay);
-
-// находим элемент, который появляется в процессе добавления
-const dayList = days.querySelector(`.trip-events__list`);
-
-render(dayList, createTripEditForm(demoItem1.points[2], demoItem1.offers, demoItem1.destination)); // отрисовывает открытым поинт что указан
+// render(dayList, createTripEditForm(demoItem1.points[2], demoItem1.offers, demoItem1.destination)); // отрисовывает открытым поинт что указан
+renderDom(dayList, new EditFormComponent(demoItem1.points[2], demoItem1.offers, demoItem1.destination).getElement(), RenderPosition.BEFOREEND);
 renderAllPoints(demoItem1.points, days);
-
-let destinationList = document.querySelector(`#destination-list-1`);
-render(destinationList, createListDestinationsTemplate(demoItem1.destination));
-
-let eventTypeList = document.querySelector(`.event__type-list`);
-
-render(eventTypeList, makeListTransferEvent(demoItem1.offers));
-
-// deleteDate(demoItem1.points);

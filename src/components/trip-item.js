@@ -1,5 +1,8 @@
+// ТIT 1 Имопрты
 import moment from 'moment';
-// TI 01 Разметка одного дополнительного офера
+import {choosePreposition, makeLetterCase, createElement} from "../utils.js";
+
+// TIT 2 Разметка одного дополнительного офера
 const createOfferMarkup = (offerTitle, offerPrice) => {
   return (`
   <li class="event__offer">
@@ -9,37 +12,16 @@ const createOfferMarkup = (offerTitle, offerPrice) => {
        </li>
   `);
 };
+// TIT 2 ENDED
 
-// TI 02 На базе разметки генерируем столько оферо сколько пришло в ответе
+// TIT 3 На базе разметки генерируем столько оферо сколько пришло в ответе
 const createOfferTemplate = (arr) => {
   return arr.map((it) => createOfferMarkup(it.title, it.price)).join(`\n`);
 };
-
-// TI 03 Функция которая делает лэттэ кейс
-const makeLetterCase = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
-// TI 04 Функция выбирает prepositiion
-const choosePreposition = (eventType) => {
-
-  const prepositiion = {
-    drive: `to`,
-    checkin: `in`,
-    sightseeing: `in`,
-    flight: `to`,
-    taxi: `to`,
-    bus: `to`,
-    transport: `to`,
-    restaurant: `in`,
-    ship: `to`,
-    train: `to`
-  };
-  return prepositiion[eventType.replace(/[^A-Za-zА-Яа-яЁё]/g, ``).toLowerCase()]; // удаляем пробелы тире и все из типа точки
-};
+// TIT 3 ENDED
 
 
-// TI 05 Функция высчитавает продолжительность события используется momemnt js
+// TIT 4 Функция высчитавает продолжительность события используется momemnt js
 const calcDuration = (dateToFull, dateFromFull) => {
   const now = moment(dateToFull);
   const then = moment(dateFromFull);
@@ -62,10 +44,10 @@ const calcDuration = (dateToFull, dateFromFull) => {
 
   return `${resultDays} ${resultHours} ${resultMinutes}`;
 };
+// TIT 4 ENDED
 
-// Функция сравнивает новую дату пользовательской точки из массива с предыдыдушей
-// если дата не повторяется то дата отображается в размтке, если дата повторяется
-// то дата не показывается в разметке
+
+// TIT 5 Функция сравнивает новую дату пользовательской точки из массива с предыдыдушей если дата не повторяется то дата отображается в размтке, если дата повторяется то дата не показывается в разметке
 const compareDate = (date) => {
   let result = ``;
   const currentDate = moment(date).format(`DD MM`);
@@ -79,14 +61,15 @@ const compareDate = (date) => {
   window.ys = currentDate;
   return result;
 };
+// TIT 5 ENDED
 
-// ТI 06 Функция к-ая занимается формирование финального вида точки
-export const createItemMarkup = (arr) => {
+
+// ТIT 5 Функция к-ая занимается формирование финального вида точки
+const createItemMarkup = (arr) => {
   const isHided = compareDate(arr.date_from);
   const eventType = makeLetterCase(arr.type);
   const preposition = choosePreposition(eventType);
   const destinationName = arr.destination.name;
-
 
   const dateFromFull = arr.date_from;
   const dateToFull = arr.date_to;
@@ -102,32 +85,21 @@ export const createItemMarkup = (arr) => {
   const areOffers = arr.offers.length > 0; // проверяем длинну ответа по офферам
   const offers = areOffers ? createOfferTemplate(arr.offers) : `No offers choosen`; // если оферы есть то отрисоываем их
 
-  return (`
-<li class="trip-events__item day">
-
-  <div class="day__info">
-    <span class="day__counter ${isHided}">${dateStageDay}</span>
-    <time class="day__date ${isHided}" datetime="${dateFromFull}">${dateStageMonthYear}</time>
+  return (`<li class="trip-events__item day"><div class="day__info"><span class="day__counter ${isHided}">${dateStageDay}</span>
+ <time class="day__date ${isHided}" datetime="${dateFromFull}">${dateStageMonthYear}</time>
     <span class="day__date day__week ${isHided}">${dateStageDayWeek}</span>
   </div>
   <ul class="trip-events__list"></ul>
-
   <div class="event">
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${eventType}.png" alt="${eventType} icon">
     </div>
     <h3 class="event__title">${eventType} ${preposition} ${destinationName}</h3>
     <div class="event__schedule">
-      <p class="event__time">
-        <time class="event__start-time" datetime="${dateFromFull}">${timeFrom}</time>
-        &mdash;
-        <time class="event__end-time" datetime="${dateToFull}">${timeTo}</time>
-      </p>
+      <p class="event__time"><time class="event__start-time" datetime="${dateFromFull}">${timeFrom}</time>&mdash;<time class="event__end-time" datetime="${dateToFull}">${timeTo}</time></p>
       <p class="event__duration">${duration}</p>
     </div>
-    <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
-    </p>
+    <p class="event__price">&euro;&nbsp;<span class="event__price-value">${basePrice}</span></p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
      ${offers}
@@ -136,6 +108,31 @@ export const createItemMarkup = (arr) => {
       <span class="visually-hidden">Open event</span>
     </button>
   </div>
-</li>
-`);
+</li>`);
 };
+// ТIT 5 ENDED
+
+
+// TIT 6 Делаем класс для точки в маршруте
+export default class TripItem {
+  constructor(item) {
+    this._item = item;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createItemMarkup(this._item);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+// ТIT 6 ENDED

@@ -1,8 +1,9 @@
 import moment from 'moment';
+import {createElement} from "../utils.js";
 const AMOUNT_DESTINATION_IN_INFO = 3;
 
 // Информация о путешествии и маршрут
-// TIN 01 Находит среди всех точек последнюю точку и берет из нее FROM_TO
+// TIN 1 Находит среди всех точек последнюю точку и берет из нее FROM_TO
 const prepareDate = (arr) => {
   let result = null;
   arr.map((it) => {
@@ -10,9 +11,10 @@ const prepareDate = (arr) => {
   });
   return result;
 };
+// TIN 1 ENDED
 
-// TIN 02 Определяет продолжнительность путешествия. Также ЕСЛИ даты идут в одном месяце
-// то отобржает так APR, WED 8—FRI 17. Если начало и конец в разных то APR, WED 8— MAY, FRI 17.
+
+// TIN 2 Определяет продолжнительность путешествия. Также ЕСЛИ даты идут в одном месяце, то отобржает так APR, WED 8—FRI 17. Если начало и конец в разных то APR, WED 8— MAY, FRI 17.
 const checkDates = (arr) => {
   const sDateOriginal = arr[0].date_from;
   let result = `Duration of your awesome trip`;
@@ -32,8 +34,10 @@ const checkDates = (arr) => {
   }
   return result;
 };
+// TIN2 ENDED
 
-// TIN 03 Формирует список наших маршрутов Город -- Город -- Город или Город--...--Город
+
+// TIN 3 Формирует список наших маршрутов Город -- Город -- Город или Город--...--Город
 const createRoute = (arr) => {
   let desitanions = [];
   let result = null;
@@ -55,20 +59,45 @@ const createRoute = (arr) => {
 
   return result;
 };
+// TIN 3 ENDED
 
 
-export const tripItemInfo = (arr) => {
+// TIN 4 Основная фукнция
+const createInfoFullMarkup = (arr) => {
   const duration = checkDates(arr); // расчитываем длительность поездки
   const route = createRoute(arr);
 
-
-  return (`
-  <section class="trip-main__trip-info  trip-info">
+  return (`<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${route}</h1>
     <p class="trip-info__dates">${duration}</p>
   </div>
-</section>
-  `);
+</section>`);
 
 };
+// TIN4 ENDED
+
+
+// TIN 5 Класс для эксопрта
+export default class TripFullInfo {
+  constructor(item) {
+    this._item = item;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createInfoFullMarkup(this._item);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+// TIN 5 ENDED

@@ -1,23 +1,9 @@
 import moment from 'moment';
-// import {choosePreposition1} from "./mock/utils.js";
-// import {demoItem1} from "./mock/item-demo.js";
+import {choosePreposition, createElement, makeLetterCase} from "../utils.js";
 
 
-const prepositiion = {
-  drive: `to`,
-  checkin: `in`,
-  sightseeing: `in`,
-  flight: `to`,
-  taxi: `to`,
-  bus: `to`,
-  transport: `to`,
-  restaurant: `in`,
-  ship: `to`,
-  train: `to`
-};
-
-// /////////// ВЫВОДИМ ДОПЫ /////////////
-// Данная функция шаблонизирует один офер
+// TFO 1 Выводим все допы, которые доступны для данного направления
+// ===== TFO 11 Делаем шаблон одного офера
 const makeOffer = (offerTitle, offerPrice, checked = ``) => {
   return (`<div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerTitle}-1" type="checkbox" name="event-${offerTitle}" ${checked}>
@@ -28,9 +14,9 @@ const makeOffer = (offerTitle, offerPrice, checked = ``) => {
   </label>
 </div>`);
 };
+// ===== TFO 11 Конец
 
-// Данная функция получает тип точки и согласно типу точки ищет ВСЕ допы для данной точки
-// Также она делает чекнутыми все офферы которые были выбраны юзером
+// ===== TFO 12 По типу точки делает список офферов для нее и выделяет те, что были выбраны юзером
 const createOfferTemplate = (arr, allOffersArr, eventType) => {
 
   const offerUserArray = [];
@@ -56,8 +42,9 @@ const createOfferTemplate = (arr, allOffersArr, eventType) => {
 
   return listOffers.map((it) => makeOffer(it.title, it.price, it.checked)).join(`\n`); // передаем результат в разметку
 };
+// ===== TFO 12 Конец
 
-// Данная функция уже берет результаты createOfferTemplate и вставляет в разметку
+// ===== TFO 13 Берет результат TFO12 и формирует финальную разметку
 const showOfferList = (offers) => {
   return (`
   <section class="event__section  event__section--offers">
@@ -69,36 +56,28 @@ const showOfferList = (offers) => {
 </section>
   `);
 };
-// /////////// ЗАКОНЧИЛИ ВЫВОДИТЬ ДОПЫ /////////////
+// /////////// ЗАКОНЧИЛИ TFO 1 ВЫВОДИТЬ ДОПЫ /////////////
 
 
-// /////////// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ, КОТОРЫЕ ПЕРЕШЛИ ИЗ ITEM-DEMO /////////////
-// Переводит названия из нижнего регистра в лэттер регистр
-const makeLetterCase = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
-// Подставляет корректный препозишин на основании типа поездки
-const choosePreposition = (eventType) => {
-
-  return prepositiion[eventType.replace(/[^A-Za-zА-Яа-яЁё]/g, ``).toLowerCase()]; // удаляем пробелы тире и все из типа точки
-};
-// /////////// КОНЕЦ ВСПОМОГАТЕЛЬНЫМ ФУНКЦИИЯМ, КОТОРЫЕ ПЕРЕШЛИ ИЗ ITEM-DEMO /////////////
-
-
-// /////////// ЭТО ФУНКЦИЯ ОТВЕЧАЕТ ЗА ОТОБРАЖАЕТ ОПИСАНИЕ НАВПРАЛЕНИЯ /////////////
-// создаем шаблон строки с фоткой
+// TFO 2 Вывод фоток для данного направления
+// ===== TFO 21 Создаем шаблон с одной фоткой
 const makeDestinationImages = (link, description) => {
   return (`
   <img class="event__photo" src="${link}" alt="${description}">
   `);
 };
-// выводим шаблон строки в разметку
+// ===== TFO 21 Конец
+
+// ===== TFO 22 Делаем нужное к-во шаблоно в на базе массива
 const makeDestinationTemplate = (arr) => {
   return arr.map((it) => makeDestinationImages(it.src, it.description)).join(`\n`);
 };
+// ===== TFO 22 Конец
+// /////////// ЗАКОНЧИЛИ TFO 2 ДОБАВЛЕНИЕ ФОТОК СОЛГЛАСНО НАПРАВЛЕНИЮ /////////////
 
-// Эта функция берет Направление из данных пользователя, и находит в данных сервера инфу по этому направлению
+
+// TFO 3 Выводим описание направления
+// ===== TFO 31 Берем из овтета сервра Напрлавение из данных пользователя и по нему находим инфу в описании направлений данное направление
 const findDestination = (userDestination, eventallDestinationsArr) => {
   let destination = {};
   for (let i = 0; i < eventallDestinationsArr.length; i++) {
@@ -109,10 +88,69 @@ const findDestination = (userDestination, eventallDestinationsArr) => {
   }
   return destination;
 };
+// ===== TFO 31 Конец
+// /////////// ЗАКОНЧИЛИ TFO 3 ДОБАВЛЕНИЕ ОПИСАНИЯ НАПРАВЛЕНИЯ /////////////
 
 
-// /////////// ЭТО ОСНОВНАЯ ФУНКЦИЯ КОТОРАЯ ДЕЛАЕТ ВСЮ РАБОТУ /////////////
-export const createTripEditForm = (arr, allOffersArr, allDestinationsArr) => {
+// TFO 4 Выводим список предложений направлений для поля Направление
+// ===== TFO 41 Формируем шаблон для одной записи в спике
+const createListDestinations = (destinationName) => {
+  return (`<option value="${destinationName}"></option>`);
+};
+// ===== TFO 41 Конец
+
+// ===== TFO 42 Формируем шаблон для одной записи в спике
+const createDestinationsList = (arr) => {
+  return arr.map((it) => createListDestinations(it.name)).join(`\n`);
+};
+// ===== TFO 42 Конец
+// /////////// ЗАКОНЧИЛИ TFO 4 ВЫВОДИТЬ СПИСОК ПРЕДЛОЖЕНИЙ НАПРАВЛЕНИЙ /////////////
+
+
+// TFO 5 Выводим список типов точек доступнхы для выбора
+// ===== TFO 51 Формирует один пункт списка
+const makeItemTransfer = (eventType) => {
+  const eventTypeLetterCase = makeLetterCase(eventType);
+  return (`
+    <div class="event__type-item">
+    <input id="event-type-${eventType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType}">
+    <label class="event__type-label  event__type-label--${eventType}" for="event-type-${eventType}-1">${eventTypeLetterCase}</label>
+  </div>
+    `);
+};
+
+// ===== TFO 52 Формирует финальный список типов и разбивает его на два типа
+const makeListTransferEvent = (allOffersArr) => {
+
+  let tranfersItems = [];
+  let activityItems = [];
+
+  for (let i = 0; i < allOffersArr.length; i++) {
+    if (allOffersArr[i].type === `restaurant` || allOffersArr[i].type === `sightseeing` || allOffersArr[i].type === `check-in`) {
+      activityItems.push(allOffersArr[i].type);
+    } else {
+      tranfersItems.push(allOffersArr[i].type);
+    }
+  }
+
+  const itemTransferList = tranfersItems.map((it) => makeItemTransfer(it)).join(`\n`);
+  const itemActivityList = activityItems.map((it) => makeItemTransfer(it)).join(`\n`);
+  return (`
+    <fieldset class="event__type-group">
+            <legend class="visually-hidden">Transfer</legend>
+            ${itemTransferList}
+          </fieldset>
+<fieldset class="event__type-group">
+${itemActivityList}
+</fieldset>
+    `);
+};
+// ===== TFO 52 Конец
+// /////////// ЗАКОНЧИЛИ TFO 5 ВЫВОДИТЬ СПИСОК ТИПОВ ТОЧЕК /////////////
+
+
+// TFO 6 Основная функция которая формирует разметку формы
+const createEditFormMarkup = (arr, allOffersArr, allDestinationsArr) => {
   const eventTypeOriginal = arr.type; // эта переменная нужна чтобы работало Check-in дальше по коду мы удалем --, чтобы работал словарь choosePreposition
   const eventType = makeLetterCase(eventTypeOriginal);
   const preposition = choosePreposition(eventType);
@@ -129,9 +167,11 @@ export const createTripEditForm = (arr, allOffersArr, allDestinationsArr) => {
   const destinationInfo = findDestination(destinationName, allDestinationsArr); // находим направление выбранное пользователем в данных сервера
   const destinationDescription = destinationInfo.description;
   const destinationPhotos = makeDestinationTemplate(destinationInfo.pictures);
+  const destinationList = createDestinationsList(allDestinationsArr);
 
-  return (`
-  <form class="trip-events__item  event  event--edit" action="#" method="post">
+  const typeList = makeListTransferEvent(allOffersArr);
+
+  return (`<form class="trip-events__item  event  event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -141,6 +181,7 @@ export const createTripEditForm = (arr, allOffersArr, allDestinationsArr) => {
       <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
   
       <div class="event__type-list">
+      ${typeList}
       </div>
     </div>
   
@@ -150,6 +191,7 @@ export const createTripEditForm = (arr, allOffersArr, allDestinationsArr) => {
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
       <datalist id="destination-list-1">
+      ${destinationList}
       </datalist>
     </div>
   
@@ -191,7 +233,32 @@ ${offers}
       </div>
     </section>
   </section>
-  </form>
-  `);
+  </form>`);
 };
-// /////////// КОНЕЦ ЭТО ОСНОВНАЯ ФУНКЦИЯ КОТОРАЯ ДЕЛАЕТ ВСЮ РАБОТУ /////////////
+// TFO 6 Конец
+// /////////// ЗАКОНЧИЛИ TFO 6 ФОРМИРОВАНИЕ РАЗМЕТКИ ФОРМЫ /////////////
+
+// TFO 7 Создаем класс
+export default class EditForm {
+  constructor(item, arrOffers, arrDestination) {
+    this._arrOffers = arrOffers;
+    this._arrDestination = arrDestination;
+    this._item = item;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditFormMarkup(this._item, this._arrOffers, this._arrDestination);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
