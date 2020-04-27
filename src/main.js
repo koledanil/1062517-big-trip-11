@@ -82,5 +82,3 @@ const renderEditFormHandler = (evt) => {
 };
 
 window.addEventListener(`click`, renderEditFormHandler);
-
-console.log(' :', );
