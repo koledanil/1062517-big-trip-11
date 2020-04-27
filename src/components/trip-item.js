@@ -51,14 +51,13 @@ const calcDuration = (dateToFull, dateFromFull) => {
 const compareDate = (date) => {
   let result = ``;
   const currentDate = moment(date).format(`DD MM`);
-
-  if (currentDate !== window.ys) {
+  if (currentDate !== window.dateBuffer) {
     result = ``;
   } else {
     result = `visually-hidden`;
   }
 
-  window.ys = currentDate;
+  window.dateBuffer = currentDate;
   return result;
 };
 // TIT 5 ENDED
@@ -70,6 +69,7 @@ const createItemMarkup = (arr) => {
   const eventType = makeLetterCase(arr.type);
   const preposition = choosePreposition(eventType);
   const destinationName = arr.destination.name;
+  const dataId = arr.id;
 
   const dateFromFull = arr.date_from;
   const dateToFull = arr.date_to;
@@ -85,7 +85,8 @@ const createItemMarkup = (arr) => {
   const areOffers = arr.offers.length > 0; // проверяем длинну ответа по офферам
   const offers = areOffers ? createOfferTemplate(arr.offers) : `No offers choosen`; // если оферы есть то отрисоываем их
 
-  return (`<li class="trip-events__item day"><div class="day__info"><span class="day__counter ${isHided}">${dateStageDay}</span>
+  // foundTemplate.setAttribute('data-id', index);
+  return (`<li class="trip-events__item day point" data-id="${dataId}"><div class="day__info"><span class="day__counter ${isHided}">${dateStageDay}</span>
  <time class="day__date ${isHided}" datetime="${dateFromFull}">${dateStageMonthYear}</time>
     <span class="day__date day__week ${isHided}">${dateStageDayWeek}</span>
   </div>

@@ -64,8 +64,17 @@ const createRoute = (arr) => {
 
 // TIN 4 Основная фукнция
 const createInfoFullMarkup = (arr) => {
-  const duration = checkDates(arr); // расчитываем длительность поездки
-  const route = createRoute(arr);
+  let duration = null;
+  let route = null;
+
+  if (arr.length !== 0) {
+    duration = checkDates(arr); // расчитываем длительность поездки
+    route = createRoute(arr);
+  } else {
+    route = `Awesome trip`;
+    duration = `go around the World`;
+  }
+
 
   return (`<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">

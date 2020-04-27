@@ -121,7 +121,6 @@ const makeItemTransfer = (eventType) => {
 
 // ===== TFO 52 Формирует финальный список типов и разбивает его на два типа
 const makeListTransferEvent = (allOffersArr) => {
-
   let tranfersItems = [];
   let activityItems = [];
 
@@ -159,6 +158,7 @@ const createEditFormMarkup = (arr, allOffersArr, allDestinationsArr) => {
   const timeFrom = moment(dateFromFull).format(`MM/DD/YY HH:MM`);
   const timeTo = moment(dateToFull).format(`MM/DD/YY HH:MM`);
   const basePrice = arr.base_price;
+  const dataId = arr.id;
 
   const areOffers = arr.offers.length > 0; // проверяем длинну ответа по офферам
   const offers = areOffers ? showOfferList(createOfferTemplate(arr, allOffersArr, eventTypeOriginal)) : ``; // если оферы есть то отрисоываем их (включая)
@@ -169,9 +169,9 @@ const createEditFormMarkup = (arr, allOffersArr, allDestinationsArr) => {
   const destinationPhotos = makeDestinationTemplate(destinationInfo.pictures);
   const destinationList = createDestinationsList(allDestinationsArr);
 
-  const typeList = makeListTransferEvent(allOffersArr);
+  const typeList = makeListTransferEvent(allOffersArr, arr);
 
-  return (`<form class="trip-events__item  event  event--edit" action="#" method="post">
+  return (`<form class="trip-events__item  event  event--edit" action="#" method="post" data-id="${dataId}">
   <header class="event__header">
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -217,6 +217,7 @@ const createEditFormMarkup = (arr, allOffersArr, allDestinationsArr) => {
   
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
+    <button class="event__rollup-btn btn-collapse-form" type="button"><span class="visually-hidden">Open event</span></button>
   </header>
   <section class="event__details">
 ${offers}
@@ -237,6 +238,7 @@ ${offers}
 };
 // TFO 6 Конец
 // /////////// ЗАКОНЧИЛИ TFO 6 ФОРМИРОВАНИЕ РАЗМЕТКИ ФОРМЫ /////////////
+
 
 // TFO 7 Создаем класс
 export default class EditForm {

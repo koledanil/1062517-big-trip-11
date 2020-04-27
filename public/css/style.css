@@ -1,6 +1,10 @@
 html {
   height: 100%; }
 
+:root {
+  --line-color-visible:rgba(255, 255, 255, 0.8)
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -59,7 +63,8 @@ main {
     bottom: 0;
     left: 130px;
     width: 2px;
-    background-color: rgba(255, 255, 255, 0.58); }
+    background-color: var(--line-color-visible); 
+  }
 
 .page-body__page-main {
   -ms-flex-positive: 1;
@@ -394,10 +399,10 @@ main {
   margin: 0;
   margin-top: 280px;
   font-weight: 500;
-  font-size: 44px;
+  font-size: 28px;
   line-height: 60px;
   text-align: center;
-  color: #ffffff;
+  color: #7e7e7e;
   opacity: 0.89; }
   .trip-events__msg--hidden {
     display: none; }
@@ -487,6 +492,7 @@ main {
 
 .day {
   display: -ms-flexbox;
+
   display: flex;
   -ms-flex-align: start;
       align-items: flex-start; }
@@ -494,7 +500,10 @@ main {
 .day__info {
   width: 55px;
   padding-top: 13px;
-  margin-right: 25px; }
+  padding-left: 20px;
+  margin-right: 0px;
+  padding-bottom: 20px;
+ }
 
 .day__counter {
   display: block;
@@ -685,7 +694,7 @@ main {
   line-height: 17px;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: #999999;
+  color: #505050;
   opacity: 0.9; }
 
 .event__price {
@@ -937,3 +946,9 @@ main {
     color: #424242;
   }
   
+  .point:hover {
+    background-color: rgba(255, 247, 170, 0.7);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+ 
