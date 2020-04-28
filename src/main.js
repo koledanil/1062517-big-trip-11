@@ -1,68 +1,84 @@
+// MA 1 Имопртируем данные
 import {demoItem1} from "./mock/item-demo.js";
 
-// импортируем файлы
-import {mainMenu} from "./components/main-menu.js"; // основное меню сайта
-import {tripContainer} from "./components/trip-container.js"; // Контейнер для маршрута
-import {tripCost} from "./components/trip-cost.js"; // Стоимость путеществия
-import {tripDay} from "./components/trip-day.js"; // 1 день путешествия и список точек
-import {tripFilters} from "./components/trip-filters.js"; // фильтрация
-import {createTripEditForm} from "./components/trip-form.js"; // Форма редактирования точки
-import {tripItemInfo} from "./components/trip-info.js"; // Информация о путешествии и маршрут
-import {createItemMarkup} from "./components/trip-item.js"; // Точка в маршруте
-// import {deleteDate} from "./components/trip-item.js";
-import {tripSort} from "./components/trip-sort.js"; // Сортировка путешествия
+// MA 2 Имопртируем подписи для интерфейса
+import {sortList, menuList, filterList,
+  FILTER_SELECTED_BY_DFLT,
+  SORT_SELECTED_BY_DFLT,
+  MENU_SELECTED_BY_DFLT,
+  WELCOME_MSG_EMPTY_SCREEN} from "./const.js";
 
-import {createListDestinationsTemplate} from "./components/form-event-list/destination-list.js";
-import {makeListTransferEvent} from "./components/form-event-list/events-list.js";
+// MA 3 Импортируем вспомогательные функции из утилит
+import {renderDom, RenderPosition} from "./utils.js";
 
-// функция рендеринга
-const render = (container, html, place = `beforeend`) => {
-  const createTemplate = () => html;
-  container.insertAdjacentHTML(place, createTemplate());
-};
+// MA 4 Импортируем компоненты одной точки маршрута, блока данных, формы редактирования
+import ItemComponent from "./components/trip-item.js";
+import FullInfoComponent from "./components/trip-info.js";
+import EditFormComponent from "./components/trip-form.js";
 
-// выводит все точки которые находятся в тестовом запросе
+// MA 5 Импортируем компоненты интерфейса сортировка, стоимость, главное меню, фильтры
+import SortListComponent from "./components/trip-sort.js";
+import TripCostComponent from "./components/trip-cost.js";
+import MainMenuComponent from "./components/main-menu.js";
+import FilterListComponent from "./components/trip-filters.js";
+import EmptyStateComponent from "./components/empty-state.js";
+
+
+// МА6 Рендерим все точки из ответа сервера
 const renderAllPoints = (arr, container) => {
   for (let i = 0; i < arr.length; i++) {
-    const result = createItemMarkup(arr[i]);
-    render(container, result);
+    renderDom(container, new ItemComponent(arr[i]).getElement(), RenderPosition.BEFOREEND);
   }
 };
 
-// находим элементы, к-ые есть сразу у нас
+// МА7 Рендерим минмальные интерфейсные штуки
 const header = document.querySelector(`.trip-main`);
-const navMenu = header.querySelector(`#nav-menu`);
-const mainFilters = header.querySelector(`#filters`);
 const events = document.querySelector(`.trip-events`);
-
-
-render(navMenu, mainMenu, `afterend`);
-render(mainFilters, tripFilters, `afterend`);
-
-render(header, tripItemInfo(demoItem1.points), `afterbegin`);
-
-// находим элемент, который появляется в процессе добавления
-const commonInfo = header.querySelector(`.trip-info`);
-render(commonInfo, tripCost);
-
-render(events, tripSort);
-render(events, tripContainer);
-
-// находим элемент, который появляется в процессе добавления
+const control = document.querySelector(`.trip-main__trip-controls`);
 const days = events.querySelector(`.trip-days`);
-render(days, tripDay);
+// const dayList = days.querySelector(`.trip-events__list`);
 
-// находим элемент, который появляется в процессе добавления
-const dayList = days.querySelector(`.trip-events__list`);
+renderDom(control, new FilterListComponent(filterList, FILTER_SELECTED_BY_DFLT).getElement(), RenderPosition.AFTERBEGIN);
+renderDom(control, new MainMenuComponent(menuList, MENU_SELECTED_BY_DFLT).getElement(), RenderPosition.AFTERBEGIN);
+renderDom(header, new FullInfoComponent(demoItem1.points).getElement(), RenderPosition.AFTERBEGIN);
+const commonInfo = header.querySelector(`.trip-info`);
+renderDom(commonInfo, new TripCostComponent().getElement(), RenderPosition.BEFOREEND);
 
-render(dayList, createTripEditForm(demoItem1.points[2], demoItem1.offers, demoItem1.destination)); // отрисовывает открытым поинт что указан
-renderAllPoints(demoItem1.points, days);
+// ==== МА7.1 Если в овтете сервера поинтс не пустые, то мы выводим их, если пустые то выводим заглушку
+if (demoItem1.points.length > 0) {
+  renderDom(events, new SortListComponent(sortList, SORT_SELECTED_BY_DFLT).getElement(), RenderPosition.AFTERBEGIN);
 
-let destinationList = document.querySelector(`#destination-list-1`);
-render(destinationList, createListDestinationsTemplate(demoItem1.destination));
+  renderAllPoints(demoItem1.points, days);
+} else {
+  const tripEvents = document.querySelector(`.trip-events`);
+  renderDom(tripEvents, new EmptyStateComponent(WELCOME_MSG_EMPTY_SCREEN).getElement(), RenderPosition.BEFOREEND);
+}
 
-let eventTypeList = document.querySelector(`.event__type-list`);
+const renderEditFormHandler = (evt) => {
+  const formContainer = evt.target.className === `event__rollup-btn btn-collapse-form`;
+  const eventContainer = evt.target.closest(`.point`);
+  // ^^^ сначала я выбирал в качестве цели тэг li trip-events__item. Это привело к тому что после клика
+  // происходило появление формы (но она заменялась в li и у li оставлся тот же тэг trip-events__item),
+  // что привело к тому что слушаетлль продолжал работать и в открытой форме (в консеоль сыпались ошибки)). поэтому я добавил к каждой
+  // точке тэг  point и листенер теперь срабатывает только на тэг point
 
-render(eventTypeList, makeListTransferEvent(demoItem1.offers));
+  if (eventContainer) {
+    const eventId = eventContainer.getAttribute(`data-id`);
+    const editFromElement = new EditFormComponent(demoItem1.points[eventId], demoItem1.offers, demoItem1.destination).getElement();
+    eventContainer.parentNode.replaceChild(editFromElement, eventContainer);
+  }
 
-// deleteDate(demoItem1.points);
+  if (formContainer) {
+    window.dateBuffer = `undefined`;
+    // ^^^ Параметр используется в trip-item.js TIT 5. Без присвоения ему андефайн после 2-го открытия-закрытия формы редактирования пропадает дата слева
+    // у первой точки. Изначально он используется для хранения даты предыдущей точки, чтобы сравнивать эту дату с датой новой точки и решать
+    // надо слева выводить дату или не надо. Если дата новой точки и дата в буфере равны, то выводится дата только у первой точки, остальные точки с этой же датой
+    // получают дату слева.
+    const openedEditForm = document.querySelector(`.event--edit`);
+    const formId = openedEditForm.getAttribute(`data-id`);
+    openedEditForm.parentNode.replaceChild(new ItemComponent(demoItem1.points[formId]).getElement(), openedEditForm);
+  }
+
+};
+
+window.addEventListener(`click`, renderEditFormHandler);
