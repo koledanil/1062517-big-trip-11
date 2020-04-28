@@ -14,6 +14,7 @@ const createOfferMarkup = (offerTitle, offerPrice) => {
 };
 // TIT 2 ENDED
 
+
 // TIT 3 На базе разметки генерируем столько оферо сколько пришло в ответе
 const createOfferTemplate = (arr) => {
   return arr.map((it) => createOfferMarkup(it.title, it.price)).join(`\n`);

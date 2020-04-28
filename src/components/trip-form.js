@@ -1,4 +1,6 @@
 import moment from 'moment';
+import flatpickr from 'flatpickr';
+import "flatpickr/dist/flatpickr.min.css";
 import {choosePreposition, createElement, makeLetterCase} from "../utils.js";
 
 
@@ -246,7 +248,10 @@ export default class EditForm {
     this._arrOffers = arrOffers;
     this._arrDestination = arrDestination;
     this._item = item;
+    this._flatpickrStart = null;
+    this._flatpickrEnd = null;
     this._element = null;
+    this._applyFlatpickr();
   }
 
   getTemplate() {
@@ -263,4 +268,30 @@ export default class EditForm {
   removeElement() {
     this._element = null;
   }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
+      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    const startDate = this.getElement().querySelector(`#event-start-time-1`);
+    const endDate = this.getElement().querySelector(`#event-end-time-1`);
+
+    this._flatpickr = flatpickr(startDate, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: `today`,
+    });
+
+    this._flatpickrEnd = flatpickr(endDate, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: `today`,
+    });
+
+  }
+
 }

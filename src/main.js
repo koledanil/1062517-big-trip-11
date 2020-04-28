@@ -70,6 +70,14 @@ const renderEditFormHandler = (evt) => {
   // что привело к тому что слушаетлль продолжал работать и в открытой форме (в консеоль сыпались ошибки)). поэтому я добавил к каждой
   // точке тэг  point и листенер теперь срабатывает только на тэг point
 
+  const openedForm = document.querySelector(`.event--edit`);
+  if (openedForm) {
+    window.dateBuffer = `undefined`;
+    closeEditForm();
+  }
+// ^^^ проверяет наличие открытых форм редактирования точки. Если есть открытая форма редактирования, то он ее закроет, а потом только откроет новую
+
+
   if (eventContainer) {
     const eventId = eventContainer.getAttribute(`data-id`);
     editFormElement = new EditFormComponent(demoItem1.points[eventId], demoItem1.offers, demoItem1.destination).getElement();
@@ -93,7 +101,9 @@ const closeEditFormHandler = (evt) => {
 
   if (evt.key === `Escape` && evt.target.type !== `text`) {
     closeEditForm();
-  } else {
+  }
+
+  if (evt.key === `Escape` && evt.target.type === `text`) {
     allFields.forEach((item) => {
       item.blur();
     });
