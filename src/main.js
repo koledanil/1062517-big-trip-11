@@ -75,7 +75,7 @@ const renderEditFormHandler = (evt) => {
     window.dateBuffer = `undefined`;
     closeEditForm();
   }
-// ^^^ проверяет наличие открытых форм редактирования точки. Если есть открытая форма редактирования, то он ее закроет, а потом только откроет новую
+  // ^^^ проверяет наличие открытых форм редактирования точки. Если есть открытая форма редактирования, то он ее закроет, а потом только откроет новую
 
 
   if (eventContainer) {
@@ -114,3 +114,23 @@ const closeEditFormHandler = (evt) => {
 document.addEventListener(`click`, renderEditFormHandler);
 
 
+// 1. Если я возьму и в переменной сразу создам класс и вызову метод, ТО ПОЛУЧАЕТСЯ ОБЪЕКТА УЖЕ НИГДЕ НЕ БУДЕТ, ТАК КАК В ПЕРЕМЕННОЙ БУДЕТ ЛЕЖАТЬ
+// РЕЗУЛЬТАТ МЕТОДА КОТОРЫЙ МЫ ВЫЗВАЛИ. ВЕРНО?
+const resultMethod = new EditFormComponent(demoItem1.points[1], demoItem1.offers, demoItem1.destination).getElement();
+// eslint-disable-next-line no-console
+console.log(resultMethod); // мы увидим уже дом-элемент (а не объект)
+resultMethod.removeElement(); // выдаст ошибку, так как объекта уже не существует.
+
+// 2.Чтобы у объекта можно было вызывать методы и объект существовал мы должны сначала создать его в переменной, А ПОТОМ
+// вызывать методы.
+const newObj = new EditFormComponent(demoItem1.points[1], demoItem1.offers, demoItem1.destination);
+// eslint-disable-next-line no-console
+console.log(newObj, `создали объект`); // получим новый объект
+const createdElement = newObj.getElement();
+// eslint-disable-next-line no-console
+console.log(`createdElement :`, createdElement); // получили дом элемент на базе объекта
+// eslint-disable-next-line no-console
+console.log(`newObj :`, newObj); // объект живет дальше
+
+// 3. Получается что вариант 2 в нашем случае (например точки маршрута) не очень хорош, так как у нас получается будут висеть ненужные объекты.
+// А используя вариант 1 мы взывали метод объекта (точку маршрута) -- получили дом-элемент -- и объект исчез. Верно я рассуждаю
