@@ -13,15 +13,15 @@ const createSortType = (sortType, isChecked) => {
 
 
 // TSO 2 Делает список таких типов сортировки на базе массива
-const createSortList = (arr, SORT_SELECTED_BY_DFLT) => {
-  return arr.map((it, i) => createSortType(it, i === SORT_SELECTED_BY_DFLT)).join(`\n`);
+const createSortList = (arr, sordSelectedDefault) => {
+  return arr.map((it, i) => createSortType(it, i === sordSelectedDefault)).join(`\n`);
 };
 // TSO 2 конец
 
 
 // TSO 3 выводит лист сортировок в меню
-const createSortListMarkup = (arr, SORT_SELECTED_BY_DFLT) => {
-  const sortList = createSortList(arr, SORT_SELECTED_BY_DFLT);
+const createSortListMarkup = (arr, sordSelectedDefault) => {
+  const sortList = createSortList(arr, sordSelectedDefault);
 
   return (`<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
 <span class="trip-sort__item  trip-sort__item--day">Day</span>
@@ -34,14 +34,14 @@ ${sortList}
 
 // TSO 4 Делаем класс
 export default class SortList {
-  constructor(item, SORT_SELECTED_BY_DFLT) {
+  constructor(item, sordSelectedDefault) {
     this._item = item;
     this._element = null;
-    this._sortDflt = SORT_SELECTED_BY_DFLT;
+    this._sortDefault = sordSelectedDefault;
   }
 
   getTemplate() {
-    return createSortListMarkup(this._item, this._sortDflt);
+    return createSortListMarkup(this._item, this._sortDefault);
   }
 
   getElement() {

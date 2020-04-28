@@ -1,9 +1,12 @@
-export const sortList = [`event`, `time`, `price`];
-export const menuList = [`Table`, `Stats`];
-export const filterList = [`Everything`, `Future`, `Past`];
+export const interfaceSettings = {
+  sortlist: [`event`, `time`, `price`],
+  menulist: [`Table`, `Stats`],
+  filterlist: [`Everything`, `Future`, `Past`],
 
-export const FILTER_SELECTED_BY_DFLT = 0;
-export const SORT_SELECTED_BY_DFLT = 0;
-export const MENU_SELECTED_BY_DFLT = 0;
-
-export const WELCOME_MSG_EMPTY_SCREEN = `Click New Event to create your first point`;
+  defaultParametrs: {
+    FILTER_SELECTED_BY_DEFAULT: 0,
+    SORT_SELECTED_BY_DEFAULT: 0,
+    MENU_SELECTED_BY_DEFAUL: 0,
+    WELCOME_MSG_EMPTY_SCREEN: `Click New Event to create your first point`
+  }
+};
