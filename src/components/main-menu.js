@@ -8,15 +8,15 @@ const cteateOneMenuItem = (menuItem, isChecked) => {
 
 
 // MME 2 Делает список пунктов меню
-const createMenuList = (arr, MENU_SELECTED_BY_DFLT) => {
-  return arr.map((it, i) => cteateOneMenuItem(it, i === MENU_SELECTED_BY_DFLT)).join(`\n`);
+const createMenuList = (arr, menuSelectedDefault) => {
+  return arr.map((it, i) => cteateOneMenuItem(it, i === menuSelectedDefault)).join(`\n`);
 };
 // MME 2 конец
 
 
 // MME 3 выводит список меню
-const createMainMenuMarkup = (arr, MENU_SELECTED_BY_DFLT) => {
-  const menuList = createMenuList(arr, MENU_SELECTED_BY_DFLT);
+const createMainMenuMarkup = (arr, menuSelectedDefault) => {
+  const menuList = createMenuList(arr, menuSelectedDefault);
 
   return (`<nav class="trip-controls__trip-tabs  trip-tabs">
   ${menuList}
@@ -27,14 +27,14 @@ const createMainMenuMarkup = (arr, MENU_SELECTED_BY_DFLT) => {
 
 // MME 4 класс
 export default class MainMenu {
-  constructor(item, MENU_SELECTED_BY_DFLT) {
+  constructor(item, menuSelectedDefault) {
     this._item = item;
     this._element = null;
-    this._menuDflt = MENU_SELECTED_BY_DFLT;
+    this._menuDefault = menuSelectedDefault;
   }
 
   getTemplate() {
-    return createMainMenuMarkup(this._item, this._menuDflt);
+    return createMainMenuMarkup(this._item, this._menuDefault);
   }
 
   getElement() {

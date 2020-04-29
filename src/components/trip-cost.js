@@ -8,18 +8,11 @@ export const tripCost = `
 
 // TCO 1 формирует разметку со стоимостью
 const createTripCostMarkup = (totalSum = 0) => {
-  let result = null;
-  if (totalSum !== 0) {
-    result = `<p class="trip-info__cost">
-    Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalSum}</span>
-  </p>`;
-  } else {
-    result = `<p class="trip-info__cost">
-    Total: &euro;&nbsp;<span class="trip-info__cost-value">0</span>
-</p>`;
-  }
 
-  return result;
+  return (`<p class="trip-info__cost">
+    Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalSum === 0 ? 0 : totalSum}</span>
+  </p>`);
+
 };
 // TCO 1 конец
 

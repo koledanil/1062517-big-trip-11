@@ -11,16 +11,15 @@ const createFilterItem = (filterItem, isChecked) => {
 
 
 // TFI 2 Делает список фильтров на базе массива
-const createFilterList = (arr, FILTER_SELECTED_BY_DFLT) => {
-
-  return arr.map((it, i) => createFilterItem(it, i === FILTER_SELECTED_BY_DFLT)).join(`\n`);
+const createFilterList = (arr, filterSelectedDefault) => {
+  return arr.map((it, i) => createFilterItem(it, i === filterSelectedDefault)).join(`\n`);
 };
 // TFI 2 конец
 
 
 // TFI 3 выводит лист фильтров
-const createFilterListMarkup = (arr, FILTER_SELECTED_BY_DFLT) => {
-  const filterList = createFilterList(arr, FILTER_SELECTED_BY_DFLT);
+const createFilterListMarkup = (arr, filterSelectedDefault) => {
+  const filterList = createFilterList(arr, filterSelectedDefault);
 
   return (`<form class="trip-filters" action="#" method="get">
      ${filterList}
@@ -32,14 +31,14 @@ const createFilterListMarkup = (arr, FILTER_SELECTED_BY_DFLT) => {
 
 // TSO 4  Делаем класс
 export default class FilterList {
-  constructor(item, FILTER_SELECTED_BY_DFLT) {
+  constructor(item, filterSelectedDefault) {
     this._item = item;
     this._element = null;
-    this._filterDflt = FILTER_SELECTED_BY_DFLT;
+    this._filterDefault = filterSelectedDefault;
   }
 
   getTemplate() {
-    return createFilterListMarkup(this._item, this._filterDflt);
+    return createFilterListMarkup(this._item, this._filterDefault);
   }
 
   getElement() {

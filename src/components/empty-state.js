@@ -12,14 +12,14 @@ const createEmptyStateMarkup = (welcomeMsg) => {
 
 // EST 2  Делаем класс
 export default class EmptyState {
-  constructor(item, WELCOME_MSG_EMPTY_SCREEN) {
+  constructor(item, welcomeMsgSelectedDefault) {
     this._item = item;
     this._element = null;
-    this._msgDflt = WELCOME_MSG_EMPTY_SCREEN;
+    this._msgDefault = welcomeMsgSelectedDefault;
   }
 
   getTemplate() {
-    return createEmptyStateMarkup(this._item, this._msgDflt);
+    return createEmptyStateMarkup(this._item, this._msgDefault);
   }
 
   getElement() {
