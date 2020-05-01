@@ -1,6 +1,7 @@
 // ТIT 1 Имопрты
 import moment from 'moment';
-import {choosePreposition, makeLetterCase, createElement} from "../../components/utils.js";
+import {choosePreposition, makeLetterCase} from "../../../src/components/utils/uncategorized-util.js";
+import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
 
 // TIT 2 Разметка одного дополнительного офера
 const createOfferMarkup = (offerTitle, offerPrice) => {
@@ -115,26 +116,13 @@ const createItemMarkup = (arr) => {
 // ТIT 5 ENDED
 
 
-// TIT 6 Делаем класс для точки в маршруте
-export default class TripItem {
+// TIT 6 наследуем от абстрактного класса
+export default class TripItem extends AbstractComponent {
   constructor(item) {
+    super();
     this._item = item;
-    this._element = null;
   }
-
   getTemplate() {
     return createItemMarkup(this._item);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
-// ТIT 6 ENDED

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {createElement} from "../../components/utils.js";
+import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
 const AMOUNT_DESTINATION_IN_INFO = 3;
 
 // Информация о путешествии и маршрут
@@ -87,26 +87,13 @@ const createInfoFullMarkup = (arr) => {
 // TIN4 ENDED
 
 
-// TIN 5 Класс для эксопрта
-export default class TripFullInfo {
+// TIN 5 наследуем от абстрактного класса
+export default class TripFullInfo extends AbstractComponent {
   constructor(item) {
+    super();
     this._item = item;
-    this._element = null;
   }
-
   getTemplate() {
     return createInfoFullMarkup(this._item);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
-// TIN 5 ENDED

@@ -1,7 +1,8 @@
 import moment from 'moment';
 import flatpickr from 'flatpickr';
 import "flatpickr/dist/flatpickr.min.css";
-import {choosePreposition, createElement, makeLetterCase} from "../../components/utils.js";
+import {choosePreposition, makeLetterCase} from "../../../src/components/utils/uncategorized-util.js";
+import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
 
 
 // TFO 1 Выводим все допы, которые доступны для данного направления
@@ -242,31 +243,16 @@ ${offers}
 // /////////// ЗАКОНЧИЛИ TFO 6 ФОРМИРОВАНИЕ РАЗМЕТКИ ФОРМЫ /////////////
 
 
-// TFO 7 Создаем класс
-export default class EditForm {
+// TFO 7 наследуем от абстрактного класса
+export default class EditForm extends AbstractComponent {
   constructor(item, arrOffers, arrDestination) {
+    super();
     this._arrOffers = arrOffers;
     this._arrDestination = arrDestination;
     this._item = item;
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
-    this._element = null;
     this._applyFlatpickr();
-  }
-
-  getTemplate() {
-    return createEditFormMarkup(this._item, this._arrOffers, this._arrDestination);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   _applyFlatpickr() {
@@ -294,4 +280,7 @@ export default class EditForm {
 
   }
 
+  getTemplate() {
+    return createEditFormMarkup(this._item, this._arrOffers, this._arrDestination);
+  }
 }

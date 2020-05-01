@@ -1,4 +1,4 @@
-import {createElement} from "../../components/utils.js";
+import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
 
 // TFI 1 Создает один пунтк фильтра
 const createFilterItem = (filterItem, isChecked) => {
@@ -29,26 +29,15 @@ const createFilterListMarkup = (arr, filterSelectedDefault) => {
 // TSO 3 конец
 
 
-// TSO 4  Делаем класс
-export default class FilterList {
+// TFI 4 наследуем от абстрактного класса 
+export default class FilterList extends AbstractComponent {
   constructor(item, filterSelectedDefault) {
-    this._item = item;
-    this._element = null;
+    super();
     this._filterDefault = filterSelectedDefault;
+    this._item = item;
   }
-
   getTemplate() {
     return createFilterListMarkup(this._item, this._filterDefault);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
+

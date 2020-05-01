@@ -4,7 +4,7 @@ import {interfaceSettings} from "./const.js";
 import {demoItem1} from "./mock/item-demo.js";
 
 // ==== MA 13 Импортируем вспомогательные функции из утилит
-import {renderDom, RenderPosition} from "./components/utils.js";
+import {renderDom, RenderPosition} from "../src/components/utils/uncategorized-util.js";
 
 // ==== MA 14 Импортируем компоненты одной точки маршрута и формы редактирования
 import ItemComponent from "./components/trip-event/item.js";

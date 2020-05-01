@@ -1,4 +1,4 @@
-import {createElement} from "../../components/utils.js";
+import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
 
 // TSO 1 Создает один тип сортировки
 const createSortType = (sortType, isChecked) => {
@@ -32,26 +32,14 @@ ${sortList}
 // TSO 3 конец
 
 
-// TSO 4 Делаем класс
-export default class SortList {
+// TSO 4 наследуем от абстрактного класса
+export default class SortList extends AbstractComponent {
   constructor(item, sordSelectedDefault) {
+    super();
     this._item = item;
-    this._element = null;
     this._sortDefault = sordSelectedDefault;
   }
-
   getTemplate() {
     return createSortListMarkup(this._item, this._sortDefault);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

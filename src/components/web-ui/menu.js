@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
 
 // MME 1 Создает один пункт меню
 const cteateOneMenuItem = (menuItem, isChecked) => {
@@ -24,27 +24,14 @@ const createMainMenuMarkup = (arr, menuSelectedDefault) => {
 };
 // MME 3 конец
 
-
-// MME 4 класс
-export default class MainMenu {
+// MME 4 наследуем от абстрактного класса
+export default class MainMenu extends AbstractComponent {
   constructor(item, menuSelectedDefault) {
+    super();
     this._item = item;
-    this._element = null;
     this._menuDefault = menuSelectedDefault;
   }
-
   getTemplate() {
     return createMainMenuMarkup(this._item, this._menuDefault);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
