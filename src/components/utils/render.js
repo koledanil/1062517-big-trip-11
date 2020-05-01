@@ -26,6 +26,18 @@ export const renderDom = (container, element, place) => {
 };
 // U4 ENDED
 
+export const render = (container, component, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(component.getElement());
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(component.getElement());
+      break;
+  }
+};
+
+
 // U5 Замена элемента на другой элемент
 export const replace = (parent, newElement, oldElement) => {
   parent.parentNode.replaceChild(newElement, oldElement);

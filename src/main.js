@@ -4,7 +4,7 @@ import {interfaceSettings} from "./const.js";
 import {demoItem1} from "./mock/item-demo.js";
 
 // ==== MA 13 Импортируем вспомогательные функции из утилит
-import {renderDom, RenderPosition, replace} from "../src/components/utils/render.js";
+import {render, RenderPosition, replace} from "../src/components/utils/render.js";
 
 // ==== MA 14 Импортируем компоненты одной точки маршрута и формы редактирования
 import ItemComponent from "./components/trip-event/item.js";
@@ -22,7 +22,7 @@ import EmptyStateComponent from "./components/web-ui/empty-state.js";
 // МА2 Функция вывода всех точек
 const renderAllPoints = (arr, container) => {
   for (let i = 0; i < arr.length; i++) {
-    renderDom(container, new ItemComponent(arr[i]).getElement(), RenderPosition.BEFOREEND);
+    render(container, new ItemComponent(arr[i]), RenderPosition.BEFOREEND);
   }
 };
 
@@ -34,20 +34,20 @@ const events = document.querySelector(`.trip-events`);
 const control = document.querySelector(`.trip-main__trip-controls`);
 const days = events.querySelector(`.trip-days`);
 
-renderDom(control, new FilterListComponent(interfaceSettings.filterlist, interfaceSettings.defaultParametrs.FILTER_SELECTED_BY_DEFAULT).getElement(), RenderPosition.AFTERBEGIN);
-renderDom(control, new MainMenuComponent(interfaceSettings.menulist, interfaceSettings.defaultParametrs.MENU_SELECTED_BY_DEFAULT).getElement(), RenderPosition.AFTERBEGIN);
-renderDom(header, new FullInfoComponent(demoItem1.points).getElement(), RenderPosition.AFTERBEGIN);
+render(control, new FilterListComponent(interfaceSettings.filterlist, interfaceSettings.defaultParametrs.FILTER_SELECTED_BY_DEFAULT), RenderPosition.AFTERBEGIN);
+render(control, new MainMenuComponent(interfaceSettings.menulist, interfaceSettings.defaultParametrs.MENU_SELECTED_BY_DEFAULT), RenderPosition.AFTERBEGIN);
+render(header, new FullInfoComponent(demoItem1.points), RenderPosition.AFTERBEGIN);
 const commonInfo = header.querySelector(`.trip-info`);
-renderDom(commonInfo, new TripCostComponent().getElement(), RenderPosition.BEFOREEND);
+render(commonInfo, new TripCostComponent(), RenderPosition.BEFOREEND);
 
 // ==== МА31 Если в овтете сервера поинтс не пустые, то мы выводим их, если пустые то выводим заглушку
 if (demoItem1.points.length > 0) {
-  renderDom(events, new SortListComponent(interfaceSettings.sortlist, interfaceSettings.defaultParametrs.SORT_SELECTED_BY_DEFAULT).getElement(), RenderPosition.AFTERBEGIN);
+  render(events, new SortListComponent(interfaceSettings.sortlist, interfaceSettings.defaultParametrs.SORT_SELECTED_BY_DEFAULT), RenderPosition.AFTERBEGIN);
 
   renderAllPoints(demoItem1.points, days);
 } else {
   const tripEvents = document.querySelector(`.trip-events`);
-  renderDom(tripEvents, new EmptyStateComponent(interfaceSettings.defaultParametrs.WELCOME_MSG_EMPTY_SCREEN).getElement(), RenderPosition.BEFOREEND);
+  render(tripEvents, new EmptyStateComponent(interfaceSettings.defaultParametrs.WELCOME_MSG_EMPTY_SCREEN), RenderPosition.BEFOREEND);
 }
 
 
