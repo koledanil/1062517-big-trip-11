@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import {createElement} from "../../components/utils.js";
 
 // TFI 1 Создает один пунтк фильтра
 const createFilterItem = (filterItem, isChecked) => {

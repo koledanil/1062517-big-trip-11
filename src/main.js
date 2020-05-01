@@ -4,19 +4,19 @@ import {interfaceSettings} from "./const.js";
 import {demoItem1} from "./mock/item-demo.js";
 
 // ==== MA 13 Импортируем вспомогательные функции из утилит
-import {renderDom, RenderPosition} from "./utils.js";
+import {renderDom, RenderPosition} from "./components/utils.js";
 
-// ==== MA 14 Импортируем компоненты одной точки маршрута, блока данных, формы редактирования
-import ItemComponent from "./components/trip-item.js";
-import FullInfoComponent from "./components/trip-info.js";
-import EditFormComponent from "./components/trip-form.js";
+// ==== MA 14 Импортируем компоненты одной точки маршрута и формы редактирования
+import ItemComponent from "./components/trip-event/item.js";
+import EditFormComponent from "./components/trip-event/form.js";
 
 // ==== MA 15 Импортируем компоненты интерфейса сортировка, стоимость, главное меню, фильтры
-import SortListComponent from "./components/trip-sort.js";
-import TripCostComponent from "./components/trip-cost.js";
-import MainMenuComponent from "./components/main-menu.js";
-import FilterListComponent from "./components/trip-filters.js";
-import EmptyStateComponent from "./components/empty-state.js";
+import SortListComponent from "./components/web-ui/sort.js";
+import FullInfoComponent from "./components/web-ui/info.js";
+import TripCostComponent from "./components/web-ui/cost.js";
+import MainMenuComponent from "./components/web-ui/menu.js";
+import FilterListComponent from "./components/web-ui/filter.js";
+import EmptyStateComponent from "./components/web-ui/empty-state.js";
 
 
 // МА2 Функция вывода всех точек

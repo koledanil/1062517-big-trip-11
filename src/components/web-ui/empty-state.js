@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import {createElement} from "../../components/utils.js";
 
 // EST 1 Создаем шаблон для emptu state
 const createEmptyStateMarkup = (welcomeMsg) => {

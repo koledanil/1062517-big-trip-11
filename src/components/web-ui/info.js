@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {createElement} from "../utils.js";
+import {createElement} from "../../components/utils.js";
 const AMOUNT_DESTINATION_IN_INFO = 3;
 
 // Информация о путешествии и маршрут

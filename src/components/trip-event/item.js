@@ -1,6 +1,6 @@
 // ТIT 1 Имопрты
 import moment from 'moment';
-import {choosePreposition, makeLetterCase, createElement} from "../utils.js";
+import {choosePreposition, makeLetterCase, createElement} from "../../components/utils.js";
 
 // TIT 2 Разметка одного дополнительного офера
 const createOfferMarkup = (offerTitle, offerPrice) => {

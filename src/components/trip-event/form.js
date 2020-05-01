@@ -1,7 +1,7 @@
 import moment from 'moment';
 import flatpickr from 'flatpickr';
 import "flatpickr/dist/flatpickr.min.css";
-import {choosePreposition, createElement, makeLetterCase} from "../utils.js";
+import {choosePreposition, createElement, makeLetterCase} from "../../components/utils.js";
 
 
 // TFO 1 Выводим все допы, которые доступны для данного направления

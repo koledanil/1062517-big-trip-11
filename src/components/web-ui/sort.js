@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import {createElement} from "../../components/utils.js";
 
 // TSO 1 Создает один тип сортировки
 const createSortType = (sortType, isChecked) => {

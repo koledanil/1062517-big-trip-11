@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import {createElement} from "../../components/utils.js";
 
 export const tripCost = `
 <p class="trip-info__cost">
