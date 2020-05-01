@@ -4,7 +4,7 @@ import {interfaceSettings} from "./const.js";
 import {demoItem1} from "./mock/item-demo.js";
 
 // ==== MA 13 Импортируем вспомогательные функции из утилит
-import {renderDom, RenderPosition} from "../src/components/utils/uncategorized-util.js";
+import {renderDom, RenderPosition, replace} from "../src/components/utils/render.js";
 
 // ==== MA 14 Импортируем компоненты одной точки маршрута и формы редактирования
 import ItemComponent from "./components/trip-event/item.js";
@@ -55,7 +55,7 @@ if (demoItem1.points.length > 0) {
 // ==== МА42 Закрытие формы
 const closeEditForm = () => {
   const formId = editFormElement.getAttribute(`data-id`);
-  editFormElement.parentNode.replaceChild(new ItemComponent(demoItem1.points[formId]).getElement(), editFormElement);
+  replace(editFormElement, new ItemComponent(demoItem1.points[formId]).getElement(), editFormElement);
   editFormElement = null;
   document.removeEventListener(`keydown`, closeEditFormHandler);
 };
@@ -80,7 +80,7 @@ const renderEditFormHandler = (evt) => {
   if (eventContainer) {
     const eventId = eventContainer.getAttribute(`data-id`);
     editFormElement = new EditFormComponent(demoItem1.points[eventId], demoItem1.offers, demoItem1.destination).getElement();
-    eventContainer.parentNode.replaceChild(editFormElement, eventContainer);
+    replace(eventContainer, editFormElement, eventContainer);
     document.addEventListener(`keydown`, closeEditFormHandler);
   }
 
