@@ -4,60 +4,25 @@ import {interfaceSettings} from "./const.js";
 import {demoItem1} from "./mock/item-demo.js";
 
 // ==== MA 13 Импортируем вспомогательные функции из утилит
-import {render, RenderPosition, replace} from "../src/components/utils/render.js";
+import {replace} from "../src/components/utils/render.js";
 
 // ==== MA 14 Импортируем компоненты одной точки маршрута и формы редактирования
 import ItemComponent from "./components/trip-event/item.js";
 import EditFormComponent from "./components/trip-event/form.js";
 
-// ==== MA 15 Импортируем компоненты интерфейса сортировка, стоимость, главное меню, фильтры
-import BoardComponent from "./components/web-ui/board.js";
-import SortListComponent from "./components/web-ui/sort.js";
-import FullInfoComponent from "./components/web-ui/info.js";
-import TripCostComponent from "./components/web-ui/cost.js";
-import MainMenuComponent from "./components/web-ui/menu.js";
-import FilterListComponent from "./components/web-ui/filter.js";
-import EmptyStateComponent from "./components/web-ui/empty-state.js";
 
+// ==== MA 16 Импортируем контроллер
+import BoardController from "./components/controllers/board.js";
+import UIController from "./components/controllers/interface.js";
 
-// МА2 Функция вывода всех точек
-const renderAllPoints = (arr, container) => {
-  for (let i = 0; i < arr.length; i++) {
-    render(container, new ItemComponent(arr[i]), RenderPosition.BEFOREEND);
-  }
-};
-
-
-// МА3 Рендерим интерфейс
-// ==== МА31 Рендерим минмальные интерфейсные штуки
-const pageHeader = document.querySelector(`body`);
-const board = new BoardComponent();
-render(pageHeader, board, RenderPosition.BEFOREEND);
-// ^^^ board был добавлен так как у меня обработчики вешались на документ,
-// и крепить их к какомут-то элементу стремно, поэтому был добавлен board и
-// сюда будут крепиться все обаботчики документа (добавление обрабов в конце)
-
-const header = document.querySelector(`.trip-main`);
-const events = document.querySelector(`.trip-events`);
-const control = document.querySelector(`.trip-main__trip-controls`);
-const days = events.querySelector(`.trip-days`);
-
-
-render(control, new FilterListComponent(interfaceSettings.filterlist, interfaceSettings.defaultParametrs.FILTER_SELECTED_BY_DEFAULT), RenderPosition.AFTERBEGIN);
-render(control, new MainMenuComponent(interfaceSettings.menulist, interfaceSettings.defaultParametrs.MENU_SELECTED_BY_DEFAULT), RenderPosition.AFTERBEGIN);
-render(header, new FullInfoComponent(demoItem1.points), RenderPosition.AFTERBEGIN);
-const commonInfo = header.querySelector(`.trip-info`);
-render(commonInfo, new TripCostComponent(), RenderPosition.BEFOREEND);
-
-// ==== МА31 Если в овтете сервера поинтс не пустые, то мы выводим их, если пустые то выводим заглушку
-if (demoItem1.points.length > 0) {
-  render(events, new SortListComponent(interfaceSettings.sortlist, interfaceSettings.defaultParametrs.SORT_SELECTED_BY_DEFAULT), RenderPosition.AFTERBEGIN);
-
-  renderAllPoints(demoItem1.points, days);
-} else {
-  const tripEvents = document.querySelector(`.trip-events`);
-  render(tripEvents, new EmptyStateComponent(interfaceSettings.defaultParametrs.WELCOME_MSG_EMPTY_SCREEN), RenderPosition.BEFOREEND);
-}
+new UIController(interfaceSettings.filterlist, // имена фильтров
+    interfaceSettings.defaultParametrs.FILTER_SELECTED_BY_DEFAULT, // имена фильтров выбранные по умолчанию
+    interfaceSettings.menulist, // названия пунктов меню
+    interfaceSettings.defaultParametrs.MENU_SELECTED_BY_DEFAULT, // пункт меню по умолчанию
+    interfaceSettings.sortlist, // названия сортировок
+    interfaceSettings.defaultParametrs.SORT_SELECTED_BY_DEFAULT, // сортировка по умолчанию
+    demoItem1.points, // кусок данных с сервера, который отвечает за точки пользователя
+    interfaceSettings.defaultParametrs.WELCOME_MSG_EMPTY_SCREEN).show(); // сообщение по умолчанию если точек нет
 
 
 // МА4 Открытие / закрытие формы редактирования точки
@@ -66,7 +31,7 @@ const closeEditForm = () => {
   const formId = editFormElement.getAttribute(`data-id`);
   replace(editFormElement, new ItemComponent(demoItem1.points[formId]).getElement(), editFormElement);
   editFormElement = null;
-  board.removeBoardKeyEventListener(closeEditFormHandler);
+  // board.removeBoardKeyEventListener(closeEditFormHandler);
 };
 
 // ==== МА43 Открытие формы
@@ -120,4 +85,4 @@ const closeEditFormHandler = (evt) => {
 };
 
 // ==== MA45 Запускаем слушателей
-board.addBoardClickEventListener(renderEditFormHandler);
+// board.addBoardClickEventListener(renderEditFormHandler);

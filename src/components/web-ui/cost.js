@@ -17,7 +17,7 @@ const createTripCostMarkup = (totalSum = 0) => {
 // TCO 1 конец
 
 
-// TCO 2 наследуем от абстрактного класса 
+// TCO 2 наследуем от абстрактного класса
 export default class TripTotalCost extends AbstractComponent {
   getTemplate() {
     return createTripCostMarkup();

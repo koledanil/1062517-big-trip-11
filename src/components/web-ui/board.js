@@ -1,4 +1,4 @@
-import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
+import AbstractComponent from "../abstract/abstract-component.js";
 
 // BRD 1 Создаем шаблон разметки
 const createBoardMarkup = () => {
