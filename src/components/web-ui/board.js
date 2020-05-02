@@ -33,16 +33,5 @@ export default class BoardComponent extends AbstractComponent {
     return createBoardMarkup();
   }
 
-  addBoardClickEventListener(handler) {
-    this.getElement().addEventListener(`click`, handler);
-  }
-
-  addBoardKeyEventListener(handler) {
-    document.addEventListener(`keydown`, handler);
-  }
-
-  removeBoardKeyEventListener(handler) {
-    document.addEventListener(`keydown`, handler);
-  }
 }
 

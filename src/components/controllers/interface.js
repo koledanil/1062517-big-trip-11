@@ -44,8 +44,6 @@ export default class UIController {
     const header = document.querySelector(`.trip-main`);
     const events = document.querySelector(`.trip-events`);
     const control = document.querySelector(`.trip-main__trip-controls`);
-    const days = events.querySelector(`.trip-days`);
-
 
     render(control, new FilterListComponent(this._filterList, this._filterSelectedDefault), RenderPosition.AFTERBEGIN);
     render(control, new MainMenuComponent(this._menulist, this._menuSelectedByDefault), RenderPosition.AFTERBEGIN);

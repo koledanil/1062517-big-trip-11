@@ -256,17 +256,20 @@ export default class EditForm extends AbstractComponent {
   }
 
   _applyFlatpickr() {
-    if (this._flatpickr) {
+    if (this._flatpickrStart && this._flatpickrEnd) {
       // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
       // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
-      this._flatpickr.destroy();
-      this._flatpickr = null;
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
     }
 
     const startDate = this.getElement().querySelector(`#event-start-time-1`);
     const endDate = this.getElement().querySelector(`#event-end-time-1`);
 
-    this._flatpickr = flatpickr(startDate, {
+    this._flatpickrStart = flatpickr(startDate, {
       altInput: true,
       allowInput: true,
       defaultDate: `today`,
