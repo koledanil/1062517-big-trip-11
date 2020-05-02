@@ -18,5 +18,3 @@ new UIController(interfaceSettings.filterlist, // имена фильтров
     interfaceSettings.defaultParametrs.WELCOME_MSG_EMPTY_SCREEN).show(); // сообщение по умолчанию если точек нет
 
 new BoardController(demoItem1.points, demoItem1.offers, demoItem1.destination).show();
-
-

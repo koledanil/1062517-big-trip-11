@@ -1,10 +1,17 @@
+/* eslint-disable no-console */
 import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
+
+export const SortType = {
+  RPICE: `price`,
+  TIME: `time`,
+  EVENT: `event`,
+};
 
 // TSO 1 Создает один тип сортировки
 const createSortType = (sortType, isChecked) => {
   return (`<div class="trip-sort__item  trip-sort__item--${sortType}">
   <input id="sort-${sortType}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort" value="sort-${sortType}" ${isChecked ? `checked` : ``}>
-  <label class="trip-sort__btn  trip-sort__btn--active  trip-sort__btn--by-increase" for="sort-${sortType}">
+  <label class="trip-sort__btn  trip-sort__btn--active  trip-sort__btn--by-increase " data-sort-type="${sortType}" for="sort-${sortType}">
     ${sortType}
   </label>
 </div>`);
@@ -38,8 +45,35 @@ export default class SortList extends AbstractComponent {
     super();
     this._item = item;
     this._sortDefault = sordSelectedDefault;
+    this._currentSortType = SortType.DEFAULT;
   }
   getTemplate() {
     return createSortListMarkup(this._item, this._sortDefault);
+  }
+
+  getSortType() {
+    return this._currenSortType;
+  }
+
+  setSortTypeChangeHandler(handler) {
+    const sortList = this.getElement();
+
+    sortList.addEventListener(`click`, (evt)=>{
+      // evt.preventDefault();
+
+      const sortType = evt.target.dataset.sortType;
+      console.log(sortType);
+
+      if (this._currenSortType === sortType) {
+        return;
+      }
+
+      this._currenSortType = sortType;
+
+      handler(this._currenSortType);
+    });
+
+
+    // .trip-sort__btn
   }
 }

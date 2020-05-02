@@ -4,12 +4,22 @@ import {render, RenderPosition} from "../../components/utils/render.js";
 
 // ==== INT 12 Импортируем компоненты интерфейса сортировка, стоимость, главное меню, фильтры
 import BoardComponent from "../../components/web-ui/board.js";
-import SortListComponent from "../../components/web-ui/sort.js";
+import SortListComponent, {SortType} from "../../components/web-ui/sort.js";
 import FullInfoComponent from "../../components/web-ui/info.js";
 import TripCostComponent from "../../components/web-ui/cost.js";
 import MainMenuComponent from "../../components/web-ui/menu.js";
 import FilterListComponent from "../../components/web-ui/filter.js";
 import EmptyStateComponent from "../../components/web-ui/empty-state.js";
+
+
+
+const getSortedTasks = () => {
+console.log(`11111`)
+};
+
+
+
+
 
 // INT 2 Экспортируем контроллера
 export default class UIController {
@@ -29,6 +39,13 @@ export default class UIController {
     this._sortListSelectedDefault = sortListSeletedDefault;
     this._fullInfoArr = fullInfoArr;
     this._emptyStateWelecomeMsg = emptyStateWelecomeMsg;
+
+    this._FilterListComponent = new FilterListComponent(this._filterList, this._filterSelectedDefault);
+    this._MainMenuComponent = new MainMenuComponent(this._menulist, this._menuSelectedByDefault);
+    this._FullInfoComponent = new FullInfoComponent(this._fullInfoArr);
+    this._TripCostComponent = new TripCostComponent();
+    this._SortListComponent = new SortListComponent(this._sortList, this._sortListSelectedDefault);
+    this._EmptyStateComponent = new EmptyStateComponent(this._emptyStateWelecomeMsg);
   }
 
   show() {
@@ -44,18 +61,19 @@ export default class UIController {
     const events = document.querySelector(`.trip-events`);
     const control = document.querySelector(`.trip-main__trip-controls`);
 
-    render(control, new FilterListComponent(this._filterList, this._filterSelectedDefault), RenderPosition.AFTERBEGIN);
-    render(control, new MainMenuComponent(this._menulist, this._menuSelectedByDefault), RenderPosition.AFTERBEGIN);
-    render(header, new FullInfoComponent(this._fullInfoArr), RenderPosition.AFTERBEGIN);
+    render(control, this._FilterListComponent, RenderPosition.AFTERBEGIN);
+    render(control, this._MainMenuComponent, RenderPosition.AFTERBEGIN);
+    render(header, this._FullInfoComponent, RenderPosition.AFTERBEGIN);
     const commonInfo = header.querySelector(`.trip-info`);
-    render(commonInfo, new TripCostComponent(), RenderPosition.BEFOREEND);
+    render(commonInfo, this._TripCostComponent, RenderPosition.BEFOREEND);
 
     // INT 22 Определяет нужна заглушка или нет
     if (this._fullInfoArr.length > 0) {
-      render(events, new SortListComponent(this._sortList, this._sortListSelectedDefault), RenderPosition.AFTERBEGIN);
+      render(events, this._SortListComponent, RenderPosition.AFTERBEGIN);
+      this._SortListComponent.setSortTypeChangeHandler();
     } else {
       const tripEvents = document.querySelector(`.trip-events`);
-      render(tripEvents, new EmptyStateComponent(this._emptyStateWelecomeMsg), RenderPosition.BEFOREEND);
+      render(tripEvents, this._EmptyStateComponent, RenderPosition.BEFOREEND);
     }
   }
 }
