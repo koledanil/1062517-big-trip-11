@@ -29,7 +29,7 @@ const createFilterListMarkup = (arr, filterSelectedDefault) => {
 // TSO 3 конец
 
 
-// TFI 4 наследуем от абстрактного класса 
+// TFI 4 наследуем от абстрактного класса
 export default class FilterList extends AbstractComponent {
   constructor(item, filterSelectedDefault) {
     super();

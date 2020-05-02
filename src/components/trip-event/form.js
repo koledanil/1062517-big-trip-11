@@ -283,4 +283,8 @@ export default class EditForm extends AbstractComponent {
   getTemplate() {
     return createEditFormMarkup(this._item, this._arrOffers, this._arrDestination);
   }
+
+  addEventListener() {
+
+  }
 }

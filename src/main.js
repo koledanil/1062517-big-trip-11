@@ -11,6 +11,7 @@ import ItemComponent from "./components/trip-event/item.js";
 import EditFormComponent from "./components/trip-event/form.js";
 
 // ==== MA 15 Импортируем компоненты интерфейса сортировка, стоимость, главное меню, фильтры
+import BoardComponent from "./components/web-ui/board.js";
 import SortListComponent from "./components/web-ui/sort.js";
 import FullInfoComponent from "./components/web-ui/info.js";
 import TripCostComponent from "./components/web-ui/cost.js";
@@ -29,10 +30,18 @@ const renderAllPoints = (arr, container) => {
 
 // МА3 Рендерим интерфейс
 // ==== МА31 Рендерим минмальные интерфейсные штуки
+const pageHeader = document.querySelector(`body`);
+const board = new BoardComponent();
+render(pageHeader, board, RenderPosition.BEFOREEND);
+// ^^^ board был добавлен так как у меня обработчики вешались на документ,
+// и крепить их к какомут-то элементу стремно, поэтому был добавлен board и
+// сюда будут крепиться все обаботчики документа (добавление обрабов в конце)
+
 const header = document.querySelector(`.trip-main`);
 const events = document.querySelector(`.trip-events`);
 const control = document.querySelector(`.trip-main__trip-controls`);
 const days = events.querySelector(`.trip-days`);
+
 
 render(control, new FilterListComponent(interfaceSettings.filterlist, interfaceSettings.defaultParametrs.FILTER_SELECTED_BY_DEFAULT), RenderPosition.AFTERBEGIN);
 render(control, new MainMenuComponent(interfaceSettings.menulist, interfaceSettings.defaultParametrs.MENU_SELECTED_BY_DEFAULT), RenderPosition.AFTERBEGIN);
@@ -57,7 +66,7 @@ const closeEditForm = () => {
   const formId = editFormElement.getAttribute(`data-id`);
   replace(editFormElement, new ItemComponent(demoItem1.points[formId]).getElement(), editFormElement);
   editFormElement = null;
-  document.removeEventListener(`keydown`, closeEditFormHandler);
+  board.removeBoardKeyEventListener(closeEditFormHandler);
 };
 
 // ==== МА43 Открытие формы
@@ -81,7 +90,8 @@ const renderEditFormHandler = (evt) => {
     const eventId = eventContainer.getAttribute(`data-id`);
     editFormElement = new EditFormComponent(demoItem1.points[eventId], demoItem1.offers, demoItem1.destination).getElement();
     replace(eventContainer, editFormElement, eventContainer);
-    document.addEventListener(`keydown`, closeEditFormHandler);
+    board.addBoardKeyEventListener(closeEditFormHandler);
+    // ^^^ этот обработчик вешается внутри компонента board но на документ
   }
 
   if (formContainer) {
@@ -110,4 +120,4 @@ const closeEditFormHandler = (evt) => {
 };
 
 // ==== MA45 Запускаем слушателей
-document.addEventListener(`click`, renderEditFormHandler);
+board.addBoardClickEventListener(renderEditFormHandler);
