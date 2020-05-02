@@ -11,7 +11,7 @@ import MainMenuComponent from "../../components/web-ui/menu.js";
 import FilterListComponent from "../../components/web-ui/filter.js";
 import EmptyStateComponent from "../../components/web-ui/empty-state.js";
 
-
+// INT 2 Экспортируем контроллера
 export default class UIController {
   constructor(filterList,
       filterSelectedDefault,
@@ -32,8 +32,7 @@ export default class UIController {
   }
 
   show() {
-    // МА3 Рендерим интерфейс
-    // ==== МА31 Рендерим минмальные интерфейсные штуки
+    // INT 21 Рендерим интерфейс приложения
     const pageHeader = document.querySelector(`body`);
     const board = new BoardComponent();
     render(pageHeader, board, RenderPosition.BEFOREEND);
@@ -51,11 +50,9 @@ export default class UIController {
     const commonInfo = header.querySelector(`.trip-info`);
     render(commonInfo, new TripCostComponent(), RenderPosition.BEFOREEND);
 
-    // ==== МА31 Если в овтете сервера поинтс не пустые, то мы выводим их, если пустые то выводим заглушку
+    // INT 22 Определяет нужна заглушка или нет
     if (this._fullInfoArr.length > 0) {
       render(events, new SortListComponent(this._sortList, this._sortListSelectedDefault), RenderPosition.AFTERBEGIN);
-
-    //   renderAllPoints(this._fullInfoArr, days);
     } else {
       const tripEvents = document.querySelector(`.trip-events`);
       render(tripEvents, new EmptyStateComponent(this._emptyStateWelecomeMsg), RenderPosition.BEFOREEND);

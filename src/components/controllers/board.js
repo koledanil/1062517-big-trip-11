@@ -1,11 +1,13 @@
-// ==== MA 13 Импортируем вспомогательные функции из утилит
+// BRD 1 Имопрт
+// ==== BRD 11 Импортируем вспомогательные функции из утилит
 import {render, replace, RenderPosition} from "../../components/utils/render.js";
 
-
-// ==== MA 14 Импортируем компоненты одной точки маршрута и формы редактирования
+// ==== BRD 12 Импортируем компоненты одной точки маршрута и формы редактирования
 import ItemComponent from "../../components/trip-event/item.js";
 import EditFormComponent from "../../components/trip-event/form.js";
 
+
+// BRD 2 Функция рендера всех точек из прихода
 const renderAllPoints = (container, arr) => {
   for (let i = 0; i < arr.length; i++) {
     render(container, new ItemComponent(arr[i]), RenderPosition.BEFOREEND);
@@ -13,9 +15,8 @@ const renderAllPoints = (container, arr) => {
 };
 
 
+// BRD 3 Функция закрыти формы редактирования
 let editFormElement = null;
-// МА4 Открытие / закрытие формы редактирования точки
-// ==== МА41 Закрытие формы
 const closeEditForm = (arrPoints) => {
   const formId = editFormElement.getAttribute(`data-id`);
   replace(editFormElement, new ItemComponent(arrPoints[formId]).getElement(), editFormElement);
@@ -23,6 +24,7 @@ const closeEditForm = (arrPoints) => {
 };
 
 
+// BRD 4 Экспорт контролера
 export default class BoardController {
   constructor(arrPoints, arrOffers, arrDestination) {
     this._arrPoints = arrPoints;
@@ -31,7 +33,7 @@ export default class BoardController {
   }
 
   show() {
-    // ==== МА42 Закрытие по кнопке
+    // BRD 41 Реакция на нажатие ЕСК
     const closeEditFormHandler = (evt) => {
       const allFields = document.querySelectorAll(`.event__input`);
 
@@ -49,7 +51,8 @@ export default class BoardController {
     const days = document.querySelector(`.trip-days`);
     renderAllPoints(days, this._arrPoints);
 
-    // ==== МА43 Открытие формы
+
+    // BRD 42 Открывает форму по клику и закрывает другие открытые
     const renderEditFormHandler = (evt) => {
       const formContainer = evt.target.className === `event__rollup-btn btn-collapse-form`;
       const eventContainer = evt.target.closest(`.point`);
@@ -68,7 +71,6 @@ export default class BoardController {
       if (eventContainer) {
         const eventId = eventContainer.getAttribute(`data-id`);
         editFormElement = new EditFormComponent(this._arrPoints[eventId], this._arrOffers, this._arrDestination).getElement();
-
         replace(eventContainer, editFormElement, eventContainer);
         document.addEventListener(`keydown`, closeEditFormHandler);
       }

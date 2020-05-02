@@ -1,7 +1,8 @@
 // MA 11 Имопртируем данные
 // ==== MA 12 Имопртируем подписи для интерфейса и данные сервера
 import {interfaceSettings} from "./const.js";
-import {demoItem1} from "./mock/item-demo.js";
+import {demoItem1} from "./mock/item-demo__with-points.js";
+// import {demoItem1} from "./mock/item-demo__wo-points.js"; <--- раскоментировать чтобы увидеть заглушку когда нет точек
 
 // ==== MA 16 Импортируем контроллер
 import BoardController from "./components/controllers/board.js";

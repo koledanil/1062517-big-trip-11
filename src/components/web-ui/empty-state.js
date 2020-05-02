@@ -9,7 +9,7 @@ const createEmptyStateMarkup = (welcomeMsg) => {
 };
 // конец EST 1
 
-// EST 2 наследуем от абстрактного класса 
+// EST 2 наследуем от абстрактного класса
 export default class EmptyState extends AbstractComponent {
   constructor(item, welcomeMsgSelectedDefault) {
     super();
