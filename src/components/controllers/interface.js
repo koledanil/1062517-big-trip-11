@@ -4,22 +4,12 @@ import {render, RenderPosition} from "../../components/utils/render.js";
 
 // ==== INT 12 Импортируем компоненты интерфейса сортировка, стоимость, главное меню, фильтры
 import BoardComponent from "../../components/web-ui/board.js";
-import SortListComponent, {SortType} from "../../components/web-ui/sort.js";
+import SortListComponent from "../../components/web-ui/sort.js";
 import FullInfoComponent from "../../components/web-ui/info.js";
 import TripCostComponent from "../../components/web-ui/cost.js";
 import MainMenuComponent from "../../components/web-ui/menu.js";
 import FilterListComponent from "../../components/web-ui/filter.js";
 import EmptyStateComponent from "../../components/web-ui/empty-state.js";
-
-
-
-const getSortedTasks = () => {
-console.log(`11111`)
-};
-
-
-
-
 
 // INT 2 Экспортируем контроллера
 export default class UIController {
@@ -39,6 +29,7 @@ export default class UIController {
     this._sortListSelectedDefault = sortListSeletedDefault;
     this._fullInfoArr = fullInfoArr;
     this._emptyStateWelecomeMsg = emptyStateWelecomeMsg;
+    this._sortType = null;
 
     this._FilterListComponent = new FilterListComponent(this._filterList, this._filterSelectedDefault);
     this._MainMenuComponent = new MainMenuComponent(this._menulist, this._menuSelectedByDefault);
@@ -70,10 +61,15 @@ export default class UIController {
     // INT 22 Определяет нужна заглушка или нет
     if (this._fullInfoArr.length > 0) {
       render(events, this._SortListComponent, RenderPosition.AFTERBEGIN);
-      this._SortListComponent.setSortTypeChangeHandler();
+      // this._SortListComponent.setSortTypeChangeHandler();
     } else {
       const tripEvents = document.querySelector(`.trip-events`);
       render(tripEvents, this._EmptyStateComponent, RenderPosition.BEFOREEND);
     }
   }
+
+  sortPointsListener(fn) {
+    document.addEventListener(`click`, fn);
+  }
+
 }

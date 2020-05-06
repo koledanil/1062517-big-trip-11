@@ -9,6 +9,8 @@ import EditFormComponent from "../../components/trip-event/form.js";
 
 // BRD 2 Функция рендера всех точек из прихода
 const renderAllPoints = (container, arr) => {
+  container.innerHTML = ``;
+  window.dateBuffer = `undefined`;
   for (let i = 0; i < arr.length; i++) {
     render(container, new ItemComponent(arr[i]), RenderPosition.BEFOREEND);
   }
@@ -32,6 +34,11 @@ export default class BoardController {
     this._arrDestination = arrDestination;
   }
 
+  showPoints(arr = this._arrPoints) {
+    const days = document.querySelector(`.trip-days`);
+    renderAllPoints(days, arr);
+  }
+
   show() {
     // BRD 41 Реакция на нажатие ЕСК
     const closeEditFormHandler = (evt) => {
@@ -48,11 +55,8 @@ export default class BoardController {
         });
       }
     };
-    const days = document.querySelector(`.trip-days`);
-    renderAllPoints(days, this._arrPoints);
 
-
-    // BRD 42 Открывает форму по клику и закрывает другие открытые
+    // BRD 42 Открывает форму по клику и закрывает другие
     const renderEditFormHandler = (evt) => {
       const formContainer = evt.target.className === `event__rollup-btn btn-collapse-form`;
       const eventContainer = evt.target.closest(`.point`);

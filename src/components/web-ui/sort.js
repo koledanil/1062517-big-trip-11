@@ -41,39 +41,13 @@ ${sortList}
 
 // TSO 4 наследуем от абстрактного класса
 export default class SortList extends AbstractComponent {
-  constructor(item, sordSelectedDefault) {
+  constructor(item) {
     super();
     this._item = item;
-    this._sortDefault = sordSelectedDefault;
-    this._currentSortType = SortType.DEFAULT;
+    this._currentSortType = 1;
+
   }
   getTemplate() {
     return createSortListMarkup(this._item, this._sortDefault);
-  }
-
-  getSortType() {
-    return this._currenSortType;
-  }
-
-  setSortTypeChangeHandler(handler) {
-    const sortList = this.getElement();
-
-    sortList.addEventListener(`click`, (evt)=>{
-      // evt.preventDefault();
-
-      const sortType = evt.target.dataset.sortType;
-      console.log(sortType);
-
-      if (this._currenSortType === sortType) {
-        return;
-      }
-
-      this._currenSortType = sortType;
-
-      handler(this._currenSortType);
-    });
-
-
-    // .trip-sort__btn
   }
 }
