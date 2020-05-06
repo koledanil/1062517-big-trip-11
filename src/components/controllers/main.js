@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import moment from 'moment';
 
 export default class MainController {
@@ -12,9 +13,41 @@ export default class MainController {
     this._BoardController.showPoints();
     this._BoardController.show();
 
-    this._UIController.sortPointsListener((evt)=>{
+    this._UIController.sortEventsListener((evt)=>{
       this.sortEvents(evt);
     });
+
+    this._UIController.filterEventsListener((evt)=>{
+      this.filterEvents(evt);
+    });
+  }
+
+  filterEvents(evt) {
+    const target = evt.target.id;
+    const currentDate = moment();
+    const futureEvents = [];
+    const pastEvents = [];
+
+    this._sortedUserData.map((it) => {
+      const compareDate = currentDate < moment(it.date_from);
+      if (compareDate) {
+        futureEvents.push(it);
+      } else if (currentDate > moment(it.date_from)) {
+        pastEvents.push(it);
+      }
+    });
+
+    switch (target) {
+      case `filter-Future`:
+        this._BoardController.showPoints(futureEvents);
+        return;
+      case `filter-Everything`:
+        this._BoardController.showPoints(this._userData[0]);
+        return;
+      case `filter-Past`:
+        this._BoardController.showPoints(pastEvents);
+        return;
+    }
   }
 
   sortEvents(evt) {
@@ -29,9 +62,7 @@ export default class MainController {
         case `time`:
           const sortedTime = this._sortedUserData.sort((a, b) => {
             let firstDate = moment(a.date_from).unix();
-
             let secondDate = moment(b.date_from).unix();
-            // const ys = dateA - dateB;
             return secondDate - firstDate;
           });
           this._BoardController.showPoints(sortedTime);

@@ -6,7 +6,7 @@ import {demoItem1} from "./mock/item-demo__with-points.js";
 
 // ==== MA 16 Импортируем контроллер
 import BoardController from "./components/controllers/board.js";
-import UIController from "./components/controllers/interface.js";
+import UIController from "./components/controllers/conductor.js";
 import MainController from "./components/controllers/main.js";
 
 

@@ -1,15 +1,15 @@
 // INT 1 Имопрты
 // ==== INT 11 Импортируем вспомогательные функции из утилит
-import {render, RenderPosition} from "../../components/utils/render.js";
+import {render, RenderPosition} from "../utils/render.js";
 
 // ==== INT 12 Импортируем компоненты интерфейса сортировка, стоимость, главное меню, фильтры
-import BoardComponent from "../../components/web-ui/board.js";
-import SortListComponent from "../../components/web-ui/sort.js";
-import FullInfoComponent from "../../components/web-ui/info.js";
-import TripCostComponent from "../../components/web-ui/cost.js";
-import MainMenuComponent from "../../components/web-ui/menu.js";
-import FilterListComponent from "../../components/web-ui/filter.js";
-import EmptyStateComponent from "../../components/web-ui/empty-state.js";
+import BoardComponent from "../web-ui/board.js";
+import SortListComponent from "../web-ui/sort.js";
+import FullInfoComponent from "../web-ui/info.js";
+import TripCostComponent from "../web-ui/cost.js";
+import MainMenuComponent from "../web-ui/menu.js";
+import FilterListComponent from "../web-ui/filter.js";
+import EmptyStateComponent from "../web-ui/empty-state.js";
 
 // INT 2 Экспортируем контроллера
 export default class UIController {
@@ -68,8 +68,12 @@ export default class UIController {
     }
   }
 
-  sortPointsListener(fn) {
-    document.addEventListener(`click`, fn);
+  sortEventsListener(fn) {
+    document.querySelector(`.trip-events__trip-sort`).addEventListener(`click`, fn);
+  }
+
+  filterEventsListener(fn) {
+    document.querySelector(`.trip-filters`).addEventListener(`click`, fn);
   }
 
 }
