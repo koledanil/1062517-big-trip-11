@@ -23,32 +23,3 @@ export const makeLetterCase = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 // U2 EDNDED
-
-
-// U3 Делает дом-элемент
-export const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-  return newElement.firstChild;
-};
-// U3 ENDED
-
-
-// U4 Выводит элемент в структуру
-export const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
-
-export const renderDom = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
-// U4 ENDED
-

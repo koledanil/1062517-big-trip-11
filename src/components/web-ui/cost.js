@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
 
 export const tripCost = `
 <p class="trip-info__cost">
@@ -16,26 +16,10 @@ const createTripCostMarkup = (totalSum = 0) => {
 };
 // TCO 1 конец
 
-// TCO 2 Делаем класс
-export default class TripTotalCost {
-  constructor(item) {
-    this._item = item;
-    this._element = null;
-  }
 
+// TCO 2 наследуем от абстрактного класса
+export default class TripTotalCost extends AbstractComponent {
   getTemplate() {
-    return createTripCostMarkup(this._item);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    return createTripCostMarkup();
   }
 }
-// TCO 2 конец

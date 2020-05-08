@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
 
 // EST 1 Создаем шаблон для emptu state
 const createEmptyStateMarkup = (welcomeMsg) => {
@@ -9,27 +9,14 @@ const createEmptyStateMarkup = (welcomeMsg) => {
 };
 // конец EST 1
 
-
-// EST 2  Делаем класс
-export default class EmptyState {
+// EST 2 наследуем от абстрактного класса
+export default class EmptyState extends AbstractComponent {
   constructor(item, welcomeMsgSelectedDefault) {
-    this._item = item;
-    this._element = null;
+    super();
     this._msgDefault = welcomeMsgSelectedDefault;
+    this._item = item;
   }
-
   getTemplate() {
     return createEmptyStateMarkup(this._item, this._msgDefault);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

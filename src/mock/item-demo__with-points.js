@@ -10,7 +10,7 @@
     points: [{
       "id":"0",
       "type":"transport",
-      "date_from":"2020-04-06T14:46:23.146Z",
+      "date_from":"2021-04-06T14:46:23.146Z",
       "date_to":"2020-04-06T23:39:14.336Z",
       "destination":{
          "name":"Nagasaki",
@@ -51,7 +51,7 @@
    {
       "id":"1",
       "type":"check-in",
-      "date_from":"2020-04-06T23:39:14.336Z",
+      "date_from":"2021-04-06T23:39:14.336Z",
       "date_to":"2020-04-07T17:46:16.296Z",
       "destination":{
          "name":"Frankfurt",
