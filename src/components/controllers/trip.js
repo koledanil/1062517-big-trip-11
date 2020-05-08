@@ -10,7 +10,7 @@ import EditFormComponent from "../../components/trip-event/form.js";
 // BRD 2 Функция рендера всех точек из прихода
 const renderAllPoints = (container, arr) => {
   container.innerHTML = ``;
-  window.dateBuffer = `undefined`;
+  window.dateBuffer = null;
   for (let i = 0; i < arr.length; i++) {
     render(container, new ItemComponent(arr[i]), RenderPosition.BEFOREEND);
   }
@@ -67,7 +67,7 @@ export default class BoardController {
 
       const openedForm = document.querySelector(`.event--edit`);
       if (openedForm && eventContainer) {
-        window.dateBuffer = `undefined`;
+        window.dateBuffer = null;
         closeEditForm(this._arrPoints);
       }
       // ^^^ проверяет наличие открытых форм редактирования точки. Если есть открытая форма редактирования, то он ее закроет, а потом только откроет новую
@@ -80,7 +80,7 @@ export default class BoardController {
       }
 
       if (formContainer) {
-        window.dateBuffer = `undefined`;
+        window.dateBuffer = null;
         // ^^^ Параметр используется в trip-item.js TIT 5. Без присвоения ему андефайн после 2-го открытия-закрытия формы редактирования пропадает дата слева
         // у первой точки. Изначально он используется для хранения даты предыдущей точки, чтобы сравнивать эту дату с датой новой точки и решать
         // надо слева выводить дату или не надо. Если дата новой точки и дата в буфере равны, то выводится дата только у первой точки, остальные точки с этой же датой

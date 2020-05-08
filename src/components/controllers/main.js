@@ -2,8 +2,7 @@
 import moment from 'moment';
 
 export default class MainController {
-  constructor(uiController, boardController, uidata, userdata) {
-    this._uiData = uidata;
+  constructor(uiController, boardController, userdata) {
     this._userData = userdata;
     this._sortedUserData = this._userData[0].slice();
 
