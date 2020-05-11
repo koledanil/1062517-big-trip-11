@@ -79,7 +79,7 @@ const createItemMarkup = (arr) => {
   const timeTo = new Date(dateToFull).getUTCHours() + `:` + (`0` + new Date(dateToFull).getUTCMinutes()).slice(-2);
   const duration = calcDuration(dateToFull, dateFromFull);
 
-  const dateStageMonthYear = moment(arr.date_from).format(`MMM YY`);
+  const dateStageMonthYear = moment(arr.date_from).format(`MMM YYYY`);
   const dateStageDay = moment(arr.date_from).format(`D`);
   const dateStageDayWeek = moment(arr.date_from).format(`ddd`);
 

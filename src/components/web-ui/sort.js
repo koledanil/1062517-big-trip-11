@@ -10,7 +10,7 @@ export const SortType = {
 // TSO 1 Создает один тип сортировки
 const createSortType = (sortType, isChecked) => {
   return (`<div class="trip-sort__item  trip-sort__item--${sortType}">
-  <input id="sort-${sortType}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort" value="sort-${sortType}" ${isChecked ? `checked` : ``}>
+  <input id="sort-${sortType}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort" value="${sortType}" ${isChecked ? `checked` : ``}>
   <label class="trip-sort__btn  trip-sort__btn--active  trip-sort__btn--by-increase " data-sort-type="${sortType}" for="sort-${sortType}">
     ${sortType}
   </label>
@@ -41,10 +41,10 @@ ${sortList}
 
 // TSO 4 наследуем от абстрактного класса
 export default class SortList extends AbstractComponent {
-  constructor(item) {
+  constructor(item, sortDefault) {
     super();
     this._item = item;
-    this._currentSortType = 1;
+    this._sortDefault = sortDefault;
 
   }
   getTemplate() {

@@ -52,28 +52,30 @@ export default class MainController {
   sortEvents(evt) {
     if (evt.target.className === `trip-sort__btn  trip-sort__btn--active  trip-sort__btn--by-increase `) {
       const sortType = evt.target.getAttribute(`data-sort-type`);
-      switch (sortType) {
-        case `price` :
-          const sortedEvents = this._sortedUserData.sort((a, b) => b.base_price - a.base_price);
-          this._BoardController.showPoints(sortedEvents);
-          return;
+      const whatSortChecked = evt.target.closest(`.trip-sort__item`).querySelector(`.trip-sort__input`).checked;
 
-        case `time`:
-          const sortedTime = this._sortedUserData.sort((a, b) => {
-            let firstDate = moment(a.date_from).unix();
-            let secondDate = moment(b.date_from).unix();
-            return secondDate - firstDate;
-          });
-          this._BoardController.showPoints(sortedTime);
-          return;
+      if (!whatSortChecked) {
+        switch (sortType) {
+          case `price` :
+            const sortedEvents = this._sortedUserData.sort((a, b) => b.base_price - a.base_price);
+            this._BoardController.showPoints(sortedEvents);
+            return;
 
-        case `event`:
-          this._BoardController.showPoints(this._userData[0]);
-          return;
+          case `time`:
+            const sortedTime = this._sortedUserData.sort((a, b) => {
+              let firstDate = moment(a.date_from).unix();
+              let secondDate = moment(b.date_from).unix();
+              return secondDate - firstDate;
+            });
+            this._BoardController.showPoints(sortedTime);
+            return;
+
+          case `event`:
+            this._BoardController.showPoints(this._userData[0]);
+            return;
+        }
+        this._BoardController.showPoints();
       }
-
-
-      this._BoardController.showPoints();
     }
   }
 }
