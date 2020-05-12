@@ -92,3 +92,4 @@ export default class BoardController {
     document.addEventListener(`click`, renderEditFormHandler);
   }
 }
+// 
