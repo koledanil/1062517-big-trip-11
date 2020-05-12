@@ -6,7 +6,6 @@ import {render, replace, RenderPosition} from "../../components/utils/render.js"
 import ItemComponent from "../../components/trip-event/item.js";
 import EditFormComponent from "../../components/trip-event/form.js";
 
-
 // BRD 2 Функция рендера всех точек из прихода
 const renderAllPoints = (container, arr) => {
   container.innerHTML = ``;
@@ -27,7 +26,7 @@ const closeEditForm = (arrPoints) => {
 
 
 // BRD 4 Экспорт контролера
-export default class BoardController {
+export class TripController {
   constructor(arrPoints, arrOffers, arrDestination) {
     this._arrPoints = arrPoints;
     this._arrOffers = arrOffers;
@@ -45,6 +44,7 @@ export default class BoardController {
       const allFields = document.querySelectorAll(`.event__input`);
 
       if (evt.key === `Escape` && evt.target.type !== `text`) {
+
         closeEditForm(this._arrPoints);
         document.removeEventListener(`keydown`, closeEditFormHandler);
       }
@@ -74,8 +74,10 @@ export default class BoardController {
 
       if (eventContainer) {
         const eventId = eventContainer.getAttribute(`data-id`);
-        editFormElement = new EditFormComponent(this._arrPoints[eventId], this._arrOffers, this._arrDestination).getElement();
-        replace(eventContainer, editFormElement, eventContainer);
+        editFormElement = new EditFormComponent(this._arrPoints[eventId], this._arrOffers, this._arrDestination);
+        replace(eventContainer, editFormElement.getElement(), eventContainer);
+        editFormElement.favoriteEventListener();
+
         document.addEventListener(`keydown`, closeEditFormHandler);
       }
 
@@ -92,4 +94,6 @@ export default class BoardController {
     document.addEventListener(`click`, renderEditFormHandler);
   }
 }
-// 
+
+
+// const ys = new ItemContoller()

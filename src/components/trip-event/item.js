@@ -88,7 +88,7 @@ const createItemMarkup = (arr) => {
   const offers = areOffers ? createOfferTemplate(arr.offers) : `No offers choosen`; // если оферы есть то отрисоываем их
 
   // foundTemplate.setAttribute('data-id', index);
-  return (`<li class="trip-events__item day point" data-id="${dataId}"><div class="day__info"><span class="day__counter ${isHided}">${dateStageDay}</span>
+  return (`<li class="trip-events__item day point" id = "#${dataId}" data-id="${dataId}"><div class="day__info"><span class="day__counter ${isHided}">${dateStageDay}</span>
  <time class="day__date ${isHided}" datetime="${dateFromFull}">${dateStageMonthYear}</time>
     <span class="day__date day__week ${isHided}">${dateStageDayWeek}</span>
   </div>

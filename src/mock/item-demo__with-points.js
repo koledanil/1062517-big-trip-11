@@ -43,7 +43,7 @@
          ]
       },
       "base_price":500,
-      "is_favorite":false,
+      "is_favorite":true,
       "offers":[
   
       ]
