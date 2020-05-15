@@ -9,7 +9,7 @@ export default class MainController {
     this._UIController = uiController;
     this._UIController.show();
     this._BoardController = boardController;
-    this._BoardController.showPoints();
+    // this._BoardController.showPoints();
     this._BoardController.show();
 
     this._UIController.sortEventsListener((evt)=>{

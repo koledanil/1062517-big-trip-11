@@ -6,7 +6,7 @@ import {demoItem1} from "./mock/item-demo__with-points.js";
 
 
 // ==== MA 16 Импортируем контроллер
-import {TripController} from "./components/controllers/trip.js";
+import TripController from "./components/controllers/trip.js";
 import PageUIController from "./components/controllers/pageui.js";
 import MainController from "./components/controllers/main.js";
 
