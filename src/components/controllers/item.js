@@ -83,6 +83,7 @@ export default class ItemController {
   show(point) {
     this._ItemComponent = new ItemComponent(point);
     this._ItemElement = this._ItemComponent.getElement();
+    // const ys = new EditFormComponent(point, this._arrOffers, this._arrDestination)
     // отрисовка точки
     const days = document.querySelector(`.trip-days`);
     render(days, this._ItemComponent, RenderPosition.BEFOREEND);

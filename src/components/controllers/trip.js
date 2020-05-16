@@ -65,13 +65,8 @@ export default class TripController {
     if (index === -1) {
       return;
     }
-    
 
-    // const updatedController = new ItemController(newData, this._arrOffers, this._arrDestination);
-    
     this._arrPoints = [].concat(this._arrPoints.slice(0, index), newData, this._arrPoints.slice(index + 1));
-
-    // console.log(this._points, `контроллер ${index} обновлен`)
     taskController.show(this._arrPoints[index]);
   }
 }

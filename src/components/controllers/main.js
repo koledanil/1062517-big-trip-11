@@ -25,7 +25,7 @@ export default class MainController {
     const index = this._tasks.findIndex((it) => it === oldData);
 
     if (index === -1) {
-      console.log(`dsfsdfsdfsd`)
+      console.log(`dsfsdfsdfsd`);
       return;
     }
   }
