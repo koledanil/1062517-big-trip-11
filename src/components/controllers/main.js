@@ -9,7 +9,7 @@ export default class MainController {
     this._UIController = uiController;
     this._UIController.show();
     this._BoardController = boardController;
-    // this._BoardController.showPoints();
+    this._BoardController.onDataChange = this._onDataChange; // передает функцию из нашего босса дальше
     this._BoardController.show();
 
     this._UIController.sortEventsListener((evt)=>{
@@ -19,6 +19,15 @@ export default class MainController {
     this._UIController.filterEventsListener((evt)=>{
       this.filterEvents(evt);
     });
+  }
+
+  _onDataChange(taskController, oldData, newData) {
+    const index = this._tasks.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      console.log(`dsfsdfsdfsd`)
+      return;
+    }
   }
 
   filterEvents(evt) {

@@ -296,4 +296,8 @@ export default class EditForm extends AbstractComponent {
     return createEditFormMarkup(this._item, this._arrOffers, this._arrDestination);
   }
 
+  addFavoriteListener(fn) {
+    document.querySelector(`.event__favorite-btn`).addEventListener(`click`, fn)
+  }
+
 }

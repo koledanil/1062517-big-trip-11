@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // MA 11 Имопртируем данные
 // ==== MA 12 Имопртируем подписи для интерфейса и данные сервера
 import {interfaceSettings} from "./const.js";
@@ -24,4 +25,15 @@ const UserData = [demoItem1.points, demoItem1.offers, demoItem1.destination];
 
 new MainController(new PageUIController(...PAGE_UI_DEFAULT_SETTINGS), new TripController(...UserData), UserData);
 
+// const myObj = {"base_price": 500,
+//   "is_favorite": true,
+// };
 
+// const expFn = (obj) => {
+//   console.log(obj);
+
+//  const waat =  Object.assign({}, obj, {base_price: 2000})
+//  console.log(waat);
+// };
+
+// expFn(myObj);
