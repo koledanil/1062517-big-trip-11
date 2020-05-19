@@ -39,13 +39,15 @@ export const render = (container, component, place) => {
 
 
 // U5 Замена элемента на другой элемент
-export const replace = (parent, newElement, oldElement) => {
-  const isExistElements = !!(parent && newElement && oldElement);
+export const replace = (newComponent, oldComponent) => {
+  const parentElement = oldComponent.getElement().parentElement;
+  const newElement = newComponent.getElement();
+  const oldElement = oldComponent.getElement();
+  const isExistElements = !!(parentElement && newElement && oldElement);
 
 
-  if (isExistElements && parent.contains(oldElement)) {
-    parent.parentNode.replaceChild(newElement, oldElement);
+  if (isExistElements && parentElement.contains(oldElement)) {
+    parentElement.replaceChild(newElement, oldElement);
   }
-
 };
 // U5 End

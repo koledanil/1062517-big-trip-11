@@ -2,12 +2,14 @@ import moment from 'moment';
 import flatpickr from 'flatpickr';
 import "flatpickr/dist/flatpickr.min.css";
 import {choosePreposition, makeLetterCase} from "../../../src/components/utils/uncategorized-util.js";
-import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
+// import AbstractComponent from "../../../src/components/abstract/abstract-component.js";
+
+import AbstractSmartComponent from "../../../src/components/abstract/abstract-smart-component.js";
 
 
 // TFO 1 Выводим все допы, которые доступны для данного направления
 // ===== TFO 11 Делаем шаблон одного офера
-const makeOffer = (offerTitle, offerPrice, checked = ``) => {
+const makeOffer = (offerTitle, offerPrice, checked) => {
   return (`<div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerTitle}-1" type="checkbox" name="event-${offerTitle}" ${checked}>
   <label class="event__offer-label" for="event-offer-${offerTitle}-1">
@@ -21,7 +23,7 @@ const makeOffer = (offerTitle, offerPrice, checked = ``) => {
 
 // ===== TFO 12 По типу точки делает список офферов для нее и выделяет те, что были выбраны юзером
 const createOfferTemplate = (arr, allOffersArr, eventType) => {
-
+  // debugger;
   const offerUserArray = [];
   let listOffers = null;
 
@@ -35,6 +37,7 @@ const createOfferTemplate = (arr, allOffersArr, eventType) => {
     }
   });
 
+  // debugger;
   listOffers.map((it) => { // СРЕДИ всех оферов ивента выделяем именно те которые выбраны юзером и дописываем значение checked для них
     for (let i = 0; i < offerUserArray.length; i++) {
       if (it.title === offerUserArray[i]) {
@@ -117,7 +120,7 @@ const makeItemTransfer = (eventType) => {
   return (`
     <div class="event__type-item">
     <input id="event-type-${eventType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType}">
-    <label class="event__type-label  event__type-label--${eventType}" for="event-type-${eventType}-1">${eventTypeLetterCase}</label>
+    <label class="event__type-label  event__type-label--${eventType}" data-id = '${eventType}'; for="event-type-${eventType}-1">${eventTypeLetterCase}</label>
   </div>
     `);
 };
@@ -165,8 +168,6 @@ const createEditFormMarkup = (arr, allOffersArr, allDestinationsArr) => {
 
   const areOffers = arr.offers.length > 0; // проверяем длинну ответа по офферам
   const offers = areOffers ? showOfferList(createOfferTemplate(arr, allOffersArr, eventTypeOriginal)) : ``; // если оферы есть то отрисоываем их (включая)
-  const isFavorite = arr.is_favorite;
-  const favorite = isFavorite ? `checked` : ``;
 
   const destinationName = arr.destination.name; // берем направление из пользовательских данных
   const destinationInfo = findDestination(destinationName, allDestinationsArr); // находим направление выбранное пользователем в данных сервера
@@ -221,14 +222,14 @@ const createEditFormMarkup = (arr, allOffersArr, allDestinationsArr) => {
     </div>
   
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Delete</button>
-    <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${favorite}>
+    <button class="event__reset-btn" type="reset">Cancel</button>
+    <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked="">
     <label class="event__favorite-btn" for="event-favorite-1">
-      <span class="visually-hidden">Add to favorite</span>
-      <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-        <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
-      </svg>
-    </label>
+                        <span class="visually-hidden">Add to favorite</span>
+                        <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+                          <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
+                        </svg>
+                      </label>
     <button class="event__rollup-btn btn-collapse-form" type="button"><span class="visually-hidden">Open event</span></button>
   </header>
   <section class="event__details">
@@ -253,7 +254,7 @@ ${offers}
 
 
 // TFO 7 наследуем от абстрактного класса
-export default class EditForm extends AbstractComponent {
+export default class EditForm extends AbstractSmartComponent {
   constructor(item, arrOffers, arrDestination) {
     super();
     this._arrOffers = arrOffers;
@@ -262,6 +263,9 @@ export default class EditForm extends AbstractComponent {
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
     this._applyFlatpickr();
+
+    this._closeFormClickHandler = null;
+    this._favoriteClickHandler = null;
   }
 
   _applyFlatpickr() {
@@ -296,8 +300,39 @@ export default class EditForm extends AbstractComponent {
     return createEditFormMarkup(this._item, this._arrOffers, this._arrDestination);
   }
 
-  addFavoriteListener(fn) {
-    document.querySelector(`.event__favorite-btn`).addEventListener(`click`, fn)
+  recoveryListeners() {
+    this.setCloseFormClickListener(this._closeFormClickHandler);
+    this.setFavoriteClickListener(this._favoriteClickHandler);
   }
 
+  rerender() {
+    super.rerender();
+  }
+
+  reset() {
+    this.rerender();
+  }
+
+  setCloseFormClickListener(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+    .addEventListener(`click`, handler);
+
+    this._closeFormClickHandler = handler;
+  }
+
+  setFavoriteClickListener(handler) {
+    this.getElement().querySelector(`.event__favorite-btn`)
+    .addEventListener(`click`, handler);
+
+    this._favoriteClickHandler = handler;
+    // this.rerender();
+  }
+
+  setSelectPointTypeListener(handler) {
+    this.getElement().querySelector(`.event__type`)
+    .addEventListener(`click`, () => {
+      console.log(`dfsdfsdfsdf`)
+      this.rerender();
+    });
+  }
 }

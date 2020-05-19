@@ -3,90 +3,94 @@
 import {render, replace, RenderPosition} from "../../components/utils/render.js";
 
 // ==== BRD 12 Импортируем компоненты одной точки маршрута и формы редактирования
-import ItemComponent from "../../components/trip-event/item.js";
-import EditFormComponent from "../../components/trip-event/form.js";
+import PointComponent from "../../components/trip-event/item.js";
+import PointFormComponent from "../../components/trip-event/form.js";
 
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
 
-// BRD 4 Экспорт контролера
 export default class ItemController {
-  constructor(point, arrOffers, arrDestination) {
-    this._point = point;
+  constructor(arrPoints, arrOffers, arrDestination, onDataChange, onViewChange) {
+    this._arrPoints = arrPoints;
     this._arrOffers = arrOffers;
     this._arrDestination = arrDestination;
-    this._ItemFormComponent = new EditFormComponent(this._point, this._arrOffers, this._arrDestination);
-   
 
-    this._ItemFormElement = this._ItemFormComponent.getElement();
+    this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
+    this._mode = Mode.DEFAULT;
 
-    this._bindEscHandler = this.closeEscHandler.bind(this);
-    this._containerItem = document.querySelector(`.trip-days`);
-    this._onDataChange = null;
+    this._pointComponent = null;
+    this._pointEditForm = null;
+
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
-  set containerItem(value) {
-    this._containerItem = value;
-  }
-
-  set onDataChangeFn(fn) {
-    this._onDataChange = fn;
-  }
-
-  _closeEditForm(old, newOne) {
-    replace(old, newOne, old);
-  }
-
-  _isEsc(evt) {
-    let escClose = null;
-    if (evt.key === `Escape` && evt.target.type !== `text`) {
-      escClose = true;
-    }
-
-    if (evt.key === `Escape` && evt.target.type === `text`) {
-      escClose = false;
-    }
-
-    return escClose;
-  }
-
-
-  closeEscHandler(evt) {
-    const allFields = document.querySelectorAll(`.event__input`);
-    const condition = this._isEsc(evt);
-
-    if (condition) {
-      this._closeEditForm(this._ItemFormElement, this._ItemElement);
-      document.removeEventListener(`keydown`, this._bindEscHandler);
-    }
-
-    if (!condition) {
-      allFields.forEach((it) => {
-        it.blur();
-      });
-      this._closeEditForm(this._ItemFormElement, this._ItemElement);
-      document.removeEventListener(`keydown`, this._bindEscHandler);
-    }
-  }
-
-  openEditForm() {
-    replace(this._containerItem, this._ItemFormElement, this._containerItem);
-    document.addEventListener(`keydown`, this._bindEscHandler);
-    this._ItemFormComponent.addFavoriteListener(()=>{
-      this._onDataChange(this, this._point, Object.assign({}, this._point, {base_price: 1923}));
-    });
-  }
-
-  closeEditForm() {
-    this._closeEditForm(this._ItemFormElement, this._ItemElement);
-    document.removeEventListener(`keydown`, this._bindEscHandler);
-  }
-
-  show(point) {
-    this._ItemComponent = new ItemComponent(point);
-    this._ItemElement = this._ItemComponent.getElement();
-    // const ys = new EditFormComponent(point, this._arrOffers, this._arrDestination)
-    // отрисовка точки
+  render(point) {
     const days = document.querySelector(`.trip-days`);
-    render(days, this._ItemComponent, RenderPosition.BEFOREEND);
-  }
-}
+    const oldPointComponent = this._pointComponent;
+    const oldPointEditComponent = this._pointEditForm;
 
+    this._pointComponent = new PointComponent(point);
+    this._pointEditForm = new PointFormComponent(point, this._arrOffers, this._arrDestination);
+
+    if (oldPointEditComponent && oldPointComponent) {
+      replace(this._pointComponent, oldPointComponent);
+      replace(this._pointEditForm, oldPointEditComponent);
+    } else {
+      render(days, this._pointComponent, RenderPosition.BEFOREEND);
+    }
+    
+    this._pointComponent.setOpenFormClickListener(() => {
+      // this._pointEditForm.recoveryListeners();
+      this._replacePointToEdit();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
+    });
+
+    this._pointEditForm.setCloseFormClickListener(()=>{
+      this._replaceEditToPoint();
+    });
+
+    this._pointEditForm.setFavoriteClickListener(()=>{
+      this._onDataChange(this, point, Object.assign({}, point, {
+        base_price: 4000,
+      }));
+    });
+
+    // this._pointEditForm.setSelectPointTypeListener(()=>{
+    //   console.log(`sdfsdfsdf`);
+    // })
+
+    this._mode = Mode.DEFAULT;
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditToPoint();
+    }
+  }
+  // end render
+
+  _onEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    if (isEscKey) {
+      this._replaceEditToPoint();
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+    }
+  }
+
+  _replaceEditToPoint() { // закрывашка
+    // this._taskEditComponent.reset();
+    replace(this._pointComponent, this._pointEditForm);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = Mode.DEFAULT;
+  }
+
+  _replacePointToEdit() { // открывашка
+    this._onViewChange();
+    replace(this._pointEditForm, this._pointComponent);
+    this._mode = Mode.EDIT;
+  }
+
+}

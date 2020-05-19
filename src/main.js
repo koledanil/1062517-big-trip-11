@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // MA 11 Имопртируем данные
 // ==== MA 12 Имопртируем подписи для интерфейса и данные сервера
 import {interfaceSettings} from "./const.js";
@@ -8,8 +7,6 @@ import {demoItem1} from "./mock/item-demo__with-points.js";
 
 // ==== MA 16 Импортируем контроллер
 import TripController from "./components/controllers/trip.js";
-import PageUIController from "./components/controllers/pageui.js";
-import MainController from "./components/controllers/main.js";
 
 
 const PAGE_UI_DEFAULT_SETTINGS = [interfaceSettings.filterlist, // имена фильтров
@@ -23,17 +20,7 @@ const PAGE_UI_DEFAULT_SETTINGS = [interfaceSettings.filterlist, // имена ф
 
 const UserData = [demoItem1.points, demoItem1.offers, demoItem1.destination];
 
-new MainController(new PageUIController(...PAGE_UI_DEFAULT_SETTINGS), new TripController(...UserData), UserData);
+// new MainController(new PageUIController(...PAGE_UI_DEFAULT_SETTINGS), new TripController(...UserData), UserData);
 
-// const myObj = {"base_price": 500,
-//   "is_favorite": true,
-// };
-
-// const expFn = (obj) => {
-//   console.log(obj);
-
-//  const waat =  Object.assign({}, obj, {base_price: 2000})
-//  console.log(waat);
-// };
-
-// expFn(myObj);
+const ys = new TripController(...UserData, ...PAGE_UI_DEFAULT_SETTINGS);
+ys.render(demoItem1.points);

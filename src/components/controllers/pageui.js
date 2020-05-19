@@ -60,6 +60,7 @@ export default class UIController {
 
     // INT 22 Определяет нужна заглушка или нет
     if (this._fullInfoArr.length > 0) {
+      const events = document.querySelector(`.trip-events`);
       render(events, this._SortListComponent, RenderPosition.AFTERBEGIN);
       // this._SortListComponent.setSortTypeChangeHandler();
     } else {
